@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masha's homework_September the 2nd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* GRAFFITI POP — homework page (spec §2b + homework rules: fresh every
+   open, shuffle everything, check buttons never show answers) */
+:root{
+  --wall:#17181D; --card:rgba(255,255,255,.055); --ink:#F5F3EE;
+  --ink-soft:#A9ACB8; --cyan:#2BD9E8; --magenta:#F03CB0; --orange:#FF7A29;
+  --yellow:#FFC93C; --lime:#A8E82A; --line:rgba(255,255,255,.14);
+  --radius:14px;
+  --grad:linear-gradient(90deg,var(--cyan),var(--magenta) 45%,var(--orange) 75%,var(--yellow));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 34px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 2px,transparent 2px 90px),
+    var(--wall);
+  min-height:100vh;padding:5vh clamp(14px,5vw,70px) 14vh;
+  display:flex;flex-direction:column;gap:2.6vh;max-width:1100px;margin:0 auto;
+}
+.eyebrow{font-family:'Permanent Marker',cursive;color:var(--yellow);
+  font-size:clamp(1rem,2.2vw,1.35rem);transform:rotate(-1.2deg)}
+h1{font-weight:800;font-size:clamp(1.7rem,4.2vw,3.1rem);line-height:1.12;letter-spacing:-.02em}
+h1 .spray{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic}
+.rule{width:110px;height:5px;border-radius:99px;background:var(--grad)}
+.lead{color:var(--ink-soft);font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.55}
+.lead b{color:var(--cyan)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(14px,2.2vw,22px);border-top-width:3px}
+.c-cyan{border-top-color:var(--cyan)}.c-magenta{border-top-color:var(--magenta)}
+.c-orange{border-top-color:var(--orange)}.c-lime{border-top-color:var(--lime)}
+h2{font-size:clamp(1.15rem,2.3vw,1.7rem);font-weight:800;margin-bottom:.5em}
+h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em}
+.hint{color:var(--ink-soft);font-size:clamp(.92rem,1.5vw,1.12rem);font-style:italic;line-height:1.5}
+
+/* flip cards — press to find picture / synonym / rule */
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.flip{cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+  background:rgba(255,255,255,.03);transition:border-color .2s, background .2s}
+.flip:hover{border-color:var(--cyan)}
+.flip .word{font-weight:800;font-size:clamp(1.1rem,2vw,1.4rem);color:var(--ink)}
+.flip .ask{font-family:'Permanent Marker',cursive;color:var(--yellow);font-size:.95rem;margin-top:.35em}
+.flip .back{display:none;margin-top:.6em;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.55;color:var(--ink-soft)}
+.flip.open .back{display:block}
+.flip.open{border-color:var(--magenta);background:rgba(240,60,176,.06)}
+.flip .back .ru{color:var(--yellow)}
+.flip .back .pic{font-size:1.6em;display:block;margin:.15em 0}
+
+/* quick choice */
+.qrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:.45em 0;
+  font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.6}
+.qrow .opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{border:1.5px solid var(--line);border-radius:99px;padding:.28em .95em;cursor:pointer;
+  font-weight:600;transition:all .15s;color:var(--ink)}
+.opt:hover{border-color:var(--cyan)}
+.opt.good{border-color:var(--lime);color:var(--lime);background:rgba(168,232,42,.08)}
+.opt.bad{border-color:var(--orange);color:var(--orange);background:rgba(255,122,41,.08)}
+
+/* gap-fill text */
+.text{font-size:clamp(1.1rem,2vw,1.45rem);line-height:2.15;color:var(--ink)}
+.gapinput{display:inline-block;min-width:0;width:9.2em;background:rgba(255,255,255,.05);
+  border:none;border-bottom:2px solid var(--yellow);color:var(--ink);
+  font:inherit;text-align:center;padding:.05em .2em;outline:none}
+.gapinput:focus{border-bottom-color:var(--cyan)}
+.gapinput.ok{border-bottom-color:var(--lime);color:var(--lime);font-weight:700}
+.gapinput.no{border-bottom-color:var(--orange);color:var(--orange)}
+#bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:.7em}
+#bank span{border:1.5px solid var(--cyan);color:var(--cyan);border-radius:99px;
+  padding:.25em .9em;font-weight:700;font-size:clamp(.95rem,1.6vw,1.15rem)}
+
+/* buttons + score */
+.btn{border:2px solid var(--magenta);background:transparent;color:var(--magenta);
+  font-family:'Inter';font-weight:800;font-size:clamp(1rem,1.7vw,1.2rem);
+  padding:.55em 1.6em;border-radius:99px;cursor:pointer;transition:all .18s;margin-top:14px}
+.btn:hover{background:var(--magenta);color:#2a0a1f;box-shadow:0 8px 30px rgba(240,60,176,.35)}
+.btn:active{transform:scale(.97)}
+.score{font-family:'Permanent Marker',cursive;color:var(--lime);font-size:clamp(1.1rem,2vw,1.4rem);
+  margin-left:16px;display:none}
+
+/* video part */
+.steps{counter-reset:st}
+.step{display:flex;gap:14px;align-items:baseline;padding:.5em 0;border-bottom:1px solid var(--line);
+  font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.55}
+.step:last-child{border-bottom:none}
+.step::before{counter-increment:st;content:counter(st);font-family:'Permanent Marker',cursive;
+  color:var(--lime);font-size:1.25em;min-width:1.1em}
+.foot{color:var(--ink-soft);font-size:clamp(.9rem,1.5vw,1.05rem);text-align:center;
+  font-family:'Permanent Marker',cursive;transform:rotate(-1deg)}
+
+/* matching game */
+.mgame{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.4em}
+.mcol{display:flex;flex-direction:column;gap:10px}
+.mitem{border:1.5px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);
+  color:var(--ink);font-family:'Inter';text-align:left;cursor:pointer;padding:12px 14px;
+  font-size:clamp(.98rem,1.7vw,1.2rem);line-height:1.45;transition:all .15s}
+.mitem:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.mitem .mw{font-weight:800}
+.mitem.sel{border-color:var(--yellow);background:rgba(255,201,60,.09);box-shadow:0 0 18px rgba(255,201,60,.15)}
+.mitem.locked{border-color:var(--lime);color:var(--lime);background:rgba(168,232,42,.07);cursor:default;transform:none}
+.mitem.bad{border-color:var(--orange);background:rgba(255,122,41,.1)}
+@media(max-width:640px){.mgame{grid-template-columns:1fr}}
+@media(max-width:640px){.flips{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Masha · English · homework</div>
+<h1>Your brain, two languages <span class="spray">&amp; ten words</span></h1>
+<div class="rule"></div>
+<p class="lead">This homework gets you ready for our bilingual-brain talk. Everything is clickable: press a card — inside you'll find a picture, a synonym or a rule. At the end there's a gap-fill story and one small video task. 🎧</p>
+
+<!-- PART 1 · MATCHING GAME -->
+<div class="card c-cyan">
+  <h2><span class="tag">1</span>Matching — word ⟂ idea</h2>
+  <p class="hint">Click a word, then click its match on the right. Green = locked forever, orange = try again. Both columns are shuffled every time you open the page. Beat your own move count!</p>
+  <div class="qrow" style="font-size:clamp(.95rem,1.5vw,1.1rem)">Moves: <b id="mmoves" style="color:var(--lime);font-size:1.2em">0</b> · Pairs found: <b id="mdone" style="color:var(--lime);font-size:1.2em">0</b>/10</div>
+  <div class="mgame">
+    <div class="mcol" id="mwords"></div>
+    <div class="mcol" id="mdefs"></div>
+  </div>
+</div>
+
+<!-- PART 2 · QUICK CHOICE -->
+<div class="card c-magenta">
+  <h2><span class="tag">2</span>Quick choice — one click each</h2>
+  <p class="hint">Choose the word. A wrong click just shows orange — try again at once.</p>
+  <div class="qrow">This film is really <span class="opts" data-a="funny"><button class="opt">fun</button><button class="opt">funny</button></span> — I laughed all evening!</div>
+  <div class="qrow">We had great <span class="opts" data-a="fun"><button class="opt">fun</button><button class="opt">funny</button></span> at the volleyball match.</div>
+  <div class="qrow"><span class="opts" data-a="anyway"><button class="opt">Anyway</button><button class="opt">Anyways</button></span>, we agreed to meet at seven. (for writing)</div>
+  <div class="qrow">Our car needs <span class="opts" data-a="petrol"><button class="opt">petrol</button><button class="opt">gas</button></span> — we speak British English here.</div>
+  <div class="qrow">While I <span class="opts" data-a="was watching"><button class="opt">watched</button><button class="opt">was watching</button></span> the cat on the tree, it never moved — just stared back at me.</div>
+</div>
+
+<!-- PART 3 · GAP-FILL TEXT -->
+<div class="card c-lime">
+  <h2><span class="tag">3</span>The story of Dasha — fill in the gaps</h2>
+  <p class="hint">Put the words from the bank into the story. Then press check — the right ones turn green. Reload the page and the bank reshuffles — try again!</p>
+  <div id="bank"></div>
+  <p class="text" id="story"></p>
+  <button class="btn" id="checkBtn">check</button><span class="score" id="score"></span>
+</div>
+
+<!-- PART 4 · VIDEO SUPPORT -->
+<div class="card c-orange">
+  <h2><span class="tag">4</span>🎧 The bilingual video — watch like a pro</h2>
+  <p class="hint">The video is in our Telegram. Watch in three steps — and you'll come to the lesson ready to win the debate.</p>
+  <div class="steps">
+    <div class="step"><b>First watch</b> — no pausing. Just answer: what are the <b>three types of bilinguals</b>? Write 1–2–3 in Russian or English.</div>
+    <div class="step"><b>Second watch</b> — pause when you hear a type. Note ONE fact about each type (age? how many languages? benefit?).</div>
+    <div class="step"><b>Third watch</b> (or only the parts you need) — decide: which type are YOU? Find one sentence in the video that proves it.</div>
+  </div>
+  <p class="hint" style="margin-top:.8em">Hard words from the video — just glance at them, nothing to memorise (press if curious):</p>
+  <div class="flips">
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="word">bilingual</div><div class="back">two languages in one brain — <span class="ru">двуязычный</span></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="word">benefit</div><div class="back">a good thing something gives you — <span class="ru">польза</span></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="word">delay</div><div class="back">make later, slow down — <span class="ru">задерживать</span> (the video says bilingual brains may delay dementia)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="word">dementia</div><div class="back">a serious memory illness of old age — <span class="ru">деменция</span> (only to understand, not to learn!)</div></div>
+  </div>
+</div>
+
+<!-- PART 5 · SPEAKING -->
+<div class="card c-magenta">
+  <h2><span class="tag">5</span>🎤 Your one-minute video</h2>
+  <p class="hint">Record audio or video (1 minute): <b>“Which type of bilingual am I?”</b> — name your type and give two facts from the video that prove it. Speak freely — I'll hear your English, not your fear. 😄</p>
+</div>
+
+<p class="foot">See you at the lesson — bring your notes on the three types, and be ready to defend your type! 💪</p>
+
+<script>
+/* ---------- shuffle ---------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- part 2: quick choice (one good answer, retry allowed) ---------- */
+document.querySelectorAll('.opts').forEach(box=>{
+  const good=box.dataset.a;
+  const btns=[...box.querySelectorAll('.opt')];
+  shuffle(btns).forEach(b=>box.appendChild(b));
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    if(b.textContent.trim().toLowerCase()===good.toLowerCase()){b.className='opt good';}
+    else{b.className='opt bad';setTimeout(()=>b.className='opt',700);}
+  }));
+});
+
+/* ---------- part 3: gap-fill text (bank shuffled, fresh each open) ---------- */
+const words=['fluently','trait','funny','fun','court','petrol','watch','Anyway','pasta','queue'];
+const bank=document.getElementById('bank');
+shuffle([...words]).forEach(w=>{const s=document.createElement('span');s.textContent=w;bank.appendChild(s);});
+const story=document.getElementById('story');
+const parts=[
+  "My cousin Dasha speaks three languages ",
+  ". Her best ",
+  " is humour — she is really ",
+  ", so every trip with her is ",
+  ". Last Saturday we went to the volleyball ",
+  ". On the way home we stopped at a ",
+  " station, and Dasha told us about a cat she likes to ",
+  " in the garden. ",
+  ", we were hungry, so we bought some ",
+  " and stood in a long ",
+  " at the shop."
+];
+const answers=["fluently","trait","funny","fun","court","petrol","watch","Anyway","pasta","queue"];
+parts.forEach((t,i)=>{
+  story.appendChild(document.createTextNode(t));
+  if(i<answers.length){
+    const inp=document.createElement('input');
+    inp.className='gapinput';inp.setAttribute('autocomplete','off');
+    inp.dataset.a=answers[i];inp.style.width=(answers[i].length+2.5)+'em';
+    story.appendChild(inp);
+  }
+});
+document.getElementById('checkBtn').addEventListener('click',()=>{
+  let ok=0,total=0;
+  document.querySelectorAll('.gapinput').forEach(inp=>{
+    total++;
+    const v=inp.value.trim().toLowerCase();
+    if(v===inp.dataset.a.toLowerCase()){inp.className='gapinput ok';ok++;}
+    else if(v===''){inp.className='gapinput';}
+    else{inp.className='gapinput no';}
+  });
+  const sc=document.getElementById('score');
+  sc.style.display='inline';
+  sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+});
+
+/* ---------- part 1: matching game (both columns shuffled, fresh each open) ---------- */
+const PAIRS=[
+ ["pasta 🍝","🍝 long Italian dough you boil — with meat, with cheese…"],
+ ["trait","a feature of character — kindness is a good one"],
+ ["fluently","smoothly, without stopping — how you want to speak English"],
+ ["funny","it makes you laugh 😂 (adjective only!)"],
+ ["fun","joy — and not only an adjective: We HAD ___"],
+ ["anyway","the only correct form. Not 'anyways' — never in writing"],
+ ["petrol ⛽","British fuel for cars (Americans say gas)"],
+ ["queue 🧍🧍🧍","British people standing in a line, waiting"],
+ ["court 🏐","the 'field' for volleyball, tennis, basketball"],
+ ["watch 👀","look at something for a LONG time (a cat, a film, a match)"]
+];
+const mw=document.getElementById('mwords'), md=document.getElementById('mdefs');
+const ws=shuffle(PAIRS.map((p,i)=>({t:p[0],i})));
+const ds=shuffle(PAIRS.map((p,i)=>({t:p[1],i})));
+let selW=null, selD=null, done=0, moves=0, lock=false;
+function render(col,list,side){
+  col.innerHTML='';
+  list.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='mitem'; b.dataset.i=o.i;
+    b.innerHTML= side==='w' ? `<span class="mw">${o.t}</span>` : o.t;
+    b.addEventListener('click',()=>pick(b,side));
+    col.appendChild(b);
+  });
+}
+function pick(b,side){
+  if(lock||b.classList.contains('locked'))return;
+  const other= side==='w'?selD:selW;
+  if(other){ other.classList.remove('sel'); }
+  if(side==='w'){ if(selW)selW.classList.remove('sel'); selW=b; }
+  else { if(selD)selD.classList.remove('sel'); selD=b; }
+  b.classList.add('sel');
+  if(selW&&selD){
+    moves++; document.getElementById('mmoves').textContent=moves;
+    lock=true;
+    const ok= selW.dataset.i===selD.dataset.i;
+    const w=selW,d=selD;
+    setTimeout(()=>{
+      if(ok){ w.classList.add('locked'); d.classList.add('locked');
+              w.classList.remove('sel'); d.classList.remove('sel');
+              done++; document.getElementById('mdone').textContent=done;
+              if(done===10) document.getElementById('mmoves').textContent=moves+' 🏆'; }
+      else { w.classList.add('bad'); d.classList.add('bad');
+             setTimeout(()=>{w.classList.remove('bad','sel');d.classList.remove('bad','sel');},650); }
+      selW=null; selD=null; lock=false;
+    },300);
+  }
+}
+render(mw,ws,'w'); render(md,ds,'d');
+</script>
+</body>
+</html>
