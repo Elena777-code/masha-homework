@@ -173,6 +173,16 @@ h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em
   <p class="hint">Record audio or video (1 minute): <b>“Which type of bilingual am I?”</b> — name your type and give two facts from the video that prove it. Speak freely — I'll hear your English, not your fear. 😄</p>
 </div>
 
+<!-- PART 6 · RESULTS REPORT -->
+<div class="card c-orange">
+  <h2><span class="tag">6</span>📊 My results</h2>
+  <p class="hint">When everything is done — press the green button. It opens Telegram with your results ready: press send, and Elena sees them before the lesson.</p>
+  <div id="reportOut" style="white-space:pre-wrap;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.7;color:var(--ink-soft)">Nothing to report yet — go play first! 👆</div>
+  <button class="btn" id="sendBtn" style="border-color:var(--lime);color:var(--lime)">📨 Send results to Elena</button>
+  <button class="btn" id="copyBtn" style="border-color:var(--cyan);color:var(--cyan)">📋 Copy</button>
+  <span class="score" id="copied">copied ✓</span>
+</div>
+
 <p class="foot">See you at the lesson — bring your notes on the three types, and be ready to defend your type! 💪</p>
 
 <script>
@@ -186,7 +196,7 @@ document.querySelectorAll('.opts').forEach(box=>{
   shuffle(btns).forEach(b=>box.appendChild(b));
   btns.forEach(b=>b.addEventListener('click',()=>{
     if(b.textContent.trim().toLowerCase()===good.toLowerCase()){b.className='opt good';}
-    else{b.className='opt bad';setTimeout(()=>b.className='opt',700);}
+    else{b.className='opt bad';setTimeout(()=>b.className='opt',700);R.q.push(b.closest('.qrow').textContent.trim().replace(/\s+/g,' ').slice(0,70));renderReport();}
   }));
 });
 
@@ -225,11 +235,13 @@ document.getElementById('checkBtn').addEventListener('click',()=>{
     const v=inp.value.trim().toLowerCase();
     if(v===inp.dataset.a.toLowerCase()){inp.className='gapinput ok';ok++;}
     else if(v===''){inp.className='gapinput';}
-    else{inp.className='gapinput no';}
+    else{inp.className='gapinput no';R.g[inp.dataset.a]=(R.g[inp.dataset.a]||0)+1;}
   });
+  R.gapAttempts++;
   const sc=document.getElementById('score');
   sc.style.display='inline';
   sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+  renderReport();
 });
 
 /* ---------- part 1: matching game (both columns shuffled, fresh each open) ---------- */
@@ -277,12 +289,41 @@ function pick(b,side){
               done++; document.getElementById('mdone').textContent=done;
               if(done===10) document.getElementById('mmoves').textContent=moves+' 🏆'; }
       else { w.classList.add('bad'); d.classList.add('bad');
+             R.m.push(w.querySelector('.mw').textContent+' → '+d.textContent.trim().slice(0,45));
+             renderReport();
              setTimeout(()=>{w.classList.remove('bad','sel');d.classList.remove('bad','sel');},650); }
       selW=null; selD=null; lock=false;
     },300);
   }
 }
 render(mw,ws,'w'); render(md,ds,'d');
+
+/* ---------- part 6: attempts report (session only — nothing stored) ---------- */
+const R={m:[],q:[],g:{},gapAttempts:0};
+function renderReport(){
+  const bits=[];
+  bits.push(`Matching: ${done}/10 pairs, ${moves} moves`);
+  if(R.m.length) bits.push(`  tricky pairs:
+   • `+[...new Set(R.m)].join('\n   • '));
+  if(R.q.length) bits.push(`Quick choice — missed (first click):\n   • `+[...new Set(R.q)].join('\n   • '));
+  if(R.gapAttempts){
+    bits.push(`Gap-fill: ${R.gapAttempts} check${R.gapAttempts>1?'s':''}`);
+    const g=Object.entries(R.g).filter(([,n])=>n>0).map(([w,n])=>`${w} (×${n})`);
+    bits.push(g.length?`  hard words: ${g.join(', ')}`:'  all gaps green on some try ✓');
+  }
+  const hard=[...new Set(R.m.map(x=>x.split(' → ')[0])), ...Object.keys(R.g)];
+  bits.push(hard.length?`⭐ Words to give extra love: ${[...new Set(hard)].join(', ')}`:'⭐ No word troubles so far!');
+  document.getElementById('reportOut').textContent=bits.join('\n');
+}
+function reportText(){return 'MASHA · homework 003 results\n'+document.getElementById('reportOut').textContent;}
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  window.open('https://t.me/share/url?url='+encodeURIComponent('https://elena777-code.github.io/masha-homework/')+'&text='+encodeURIComponent(reportText()));
+});
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  navigator.clipboard.writeText(reportText()).then(()=>{
+    const c=document.getElementById('copied');c.style.display='inline';setTimeout(()=>c.style.display='none',1200);
+  });
+});
 </script>
 </body>
 </html>
