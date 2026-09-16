@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masha's homework_September the 16th</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* GRAFFITI POP — homework page (spec §2b + homework rules: fresh every
+   open, shuffle everything, check buttons never show answers).
+   NEW 2026-09-16: attempts are saved in the browser (localStorage) and
+   the report lists every attempt + best %; silent open/check counters
+   let Elena see activity before the lesson. */
+:root{
+  --wall:#17181D; --card:rgba(255,255,255,.055); --ink:#F5F3EE;
+  --ink-soft:#A9ACB8; --cyan:#2BD9E8; --magenta:#F03CB0; --orange:#FF7A29;
+  --yellow:#FFC93C; --lime:#A8E82A; --line:rgba(255,255,255,.14);
+  --radius:14px;
+  --grad:linear-gradient(90deg,var(--cyan),var(--magenta) 45%,var(--orange) 75%,var(--yellow));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 34px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 2px,transparent 2px 90px),
+    var(--wall);
+  min-height:100vh;padding:5vh clamp(14px,5vw,70px) 14vh;
+  display:flex;flex-direction:column;gap:2.6vh;max-width:1100px;margin:0 auto;
+}
+.eyebrow{font-family:'Permanent Marker',cursive;color:var(--yellow);
+  font-size:clamp(1rem,2.2vw,1.35rem);transform:rotate(-1.2deg)}
+h1{font-weight:800;font-size:clamp(1.7rem,4.2vw,3.1rem);line-height:1.12;letter-spacing:-.02em}
+h1 .spray{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-style:italic;
+  display:inline-block}
+.rule{width:110px;height:5px;border-radius:99px;background:var(--grad)}
+.lead{color:var(--ink-soft);font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.55}
+.lead b{color:var(--cyan)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(14px,2.2vw,22px);border-top-width:3px}
+.c-cyan{border-top-color:var(--cyan)}.c-magenta{border-top-color:var(--magenta)}
+.c-orange{border-top-color:var(--orange)}.c-lime{border-top-color:var(--lime)}
+h2{font-size:clamp(1.15rem,2.3vw,1.7rem);font-weight:800;margin-bottom:.5em}
+h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em}
+.hint{color:var(--ink-soft);font-size:clamp(.92rem,1.5vw,1.12rem);font-style:italic;line-height:1.5}
+
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.flip{cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+  background:rgba(255,255,255,.03);transition:border-color .2s, background .2s}
+.flip:hover{border-color:var(--cyan)}
+.flip .word{font-weight:800;font-size:clamp(1.1rem,2vw,1.4rem);color:var(--ink)}
+.flip .back{display:none;margin-top:.6em;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.55;color:var(--ink-soft)}
+.flip.open .back{display:block}
+.flip.open{border-color:var(--magenta);background:rgba(240,60,176,.06)}
+
+.qrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:.45em 0;
+  font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.6}
+.qrow .opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{border:1.5px solid var(--line);border-radius:99px;padding:.28em .95em;cursor:pointer;
+  font-weight:600;transition:all .15s;color:var(--ink)}
+.opt:hover{border-color:var(--cyan)}
+.opt.good{border-color:var(--lime);color:var(--lime);background:rgba(168,232,42,.08)}
+.opt.bad{border-color:var(--orange);color:var(--orange);background:rgba(255,122,41,.08)}
+
+.text{font-size:clamp(1.1rem,2vw,1.45rem);line-height:2.15;color:var(--ink)}
+.gapinput{display:inline-block;min-width:0;width:9.2em;background:rgba(255,255,255,.05);
+  border:none;border-bottom:2px solid var(--yellow);color:var(--ink);
+  font:inherit;text-align:center;padding:.05em .2em;outline:none}
+.gapinput:focus{border-bottom-color:var(--cyan)}
+.gapinput.ok{border-bottom-color:var(--lime);color:var(--lime);font-weight:700}
+.gapinput.no{border-bottom-color:var(--orange);color:var(--orange)}
+#bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:.7em}
+#bank span{border:1.5px solid var(--cyan);color:var(--cyan);border-radius:99px;
+  padding:.25em .9em;font-weight:700;font-size:clamp(.95rem,1.6vw,1.15rem)}
+
+.btn{border:2px solid var(--magenta);background:transparent;color:var(--magenta);
+  font-family:'Inter';font-weight:800;font-size:clamp(1rem,1.7vw,1.2rem);
+  padding:.55em 1.6em;border-radius:99px;cursor:pointer;transition:all .18s;margin-top:14px}
+.btn:hover{background:var(--magenta);color:#2a0a1f;box-shadow:0 8px 30px rgba(240,60,176,.35)}
+.btn:active{transform:scale(.97)}
+.score{font-family:'Permanent Marker',cursive;color:var(--lime);font-size:clamp(1.1rem,2vw,1.4rem);
+  margin-left:16px;display:none}
+
+.steps{counter-reset:st}
+.step{display:flex;gap:14px;align-items:baseline;padding:.5em 0;border-bottom:1px solid var(--line);
+  font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.55}
+.step:last-child{border-bottom:none}
+.step::before{counter-increment:st;content:counter(st);font-family:'Permanent Marker',cursive;
+  color:var(--lime);font-size:1.25em;min-width:1.1em}
+.foot{color:var(--ink-soft);font-size:clamp(.9rem,1.5vw,1.05rem);text-align:center;
+  font-family:'Permanent Marker',cursive;transform:rotate(-1deg)}
+
+.mgame{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.4em}
+.mcol{display:flex;flex-direction:column;gap:10px}
+.mitem{border:1.5px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);
+  color:var(--ink);font-family:'Inter';text-align:left;cursor:pointer;padding:12px 14px;
+  font-size:clamp(.98rem,1.7vw,1.2rem);line-height:1.45;transition:all .15s}
+.mitem:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.mitem .mw{font-weight:800}
+.mitem.sel{border-color:var(--yellow);background:rgba(255,201,60,.09);box-shadow:0 0 18px rgba(255,201,60,.15)}
+.mitem.locked{border-color:var(--lime);color:var(--lime);background:rgba(168,232,42,.07);cursor:default;transform:none}
+.mitem.bad{border-color:var(--orange);background:rgba(255,122,41,.1)}
+@media(max-width:640px){.mgame{grid-template-columns:1fr}}
+@media(max-width:640px){.flips{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Masha · English · homework</div>
+<h1>Unit 8: the case <span class="spray">continues</span></h1>
+<div class="rule"></div>
+<p class="lead">No book this week — everything lives here. Play, click, check yourself: every part tells you straight away how you're doing. At the end press <b>Finish</b> — it saves your attempt (you can try as many times as you like, the best % stays!) and prepares the report for Elena. 🕵️</p>
+
+<!-- PART 1 · MATCHING: THE WORD SUSPECTS -->
+<div class="card c-cyan">
+  <h2><span class="tag">1</span>Matching — the word suspects</h2>
+  <p class="hint">Click a word, then click its match. Green = locked forever, orange = try again. Both columns shuffle every time you open the page.</p>
+  <div class="qrow" style="font-size:clamp(.95rem,1.5vw,1.1rem)">Moves: <b id="mmoves" style="color:var(--lime);font-size:1.2em">0</b> · Pairs found: <b id="mdone" style="color:var(--lime);font-size:1.2em">0</b>/8</div>
+  <div class="mgame">
+    <div class="mcol" id="mwords"></div>
+    <div class="mcol" id="mdefs"></div>
+  </div>
+</div>
+
+<!-- PART 2 · QUICK CHOICE: HAVE SOMETHING DONE -->
+<div class="card c-magenta">
+  <h2><span class="tag">2</span>Quick choice — have / get something done</h2>
+  <p class="hint">When someone does it FOR you: <b>have + object + V3</b>. First click counts!</p>
+  <div class="qrow">My mum <span class="opts" data-a="has"><button class="opt">has</button><button class="opt">makes</button><button class="opt">does</button></span> her hair cut every month.</div>
+  <div class="qrow">We <span class="opts" data-a="had"><button class="opt">had</button><button class="opt">have</button><button class="opt">were</button></span> the windows cleaned last Friday.</div>
+  <div class="qrow">Where do you <span class="opts" data-a="have"><button class="opt">have</button><button class="opt">make</button><button class="opt">do</button></span> your car repaired?</div>
+  <div class="qrow">I'm going to <span class="opts" data-a="have"><button class="opt">have</button><button class="opt">make</button><button class="opt">had</button></span> my phone screen replaced.</div>
+  <div class="qrow">She <span class="opts" data-a="had"><button class="opt">had</button><button class="opt">has</button><button class="opt">is having</button></span> her dress made for the party last month.</div>
+</div>
+
+<!-- PART 3 · SORT: PERSUADE, REASSURE OR RESPOND -->
+<div class="card c-orange">
+  <h2><span class="tag">3</span>Sort — persuade, reassure or respond?</h2>
+  <p class="hint">Three functions from our Speaking box. First click counts!</p>
+  <div class="qrow"><em>"Come on! Just try it!"</em> — <span class="opts" data-a="persuade"><button class="opt">persuade</button><button class="opt">reassure</button><button class="opt">respond</button></span></div>
+  <div class="qrow"><em>"Don't worry! You'll be fine."</em> — <span class="opts" data-a="reassure"><button class="opt">persuade</button><button class="opt">reassure</button><button class="opt">respond</button></span></div>
+  <div class="qrow"><em>"Why don't you try?"</em> — <span class="opts" data-a="persuade"><button class="opt">persuade</button><button class="opt">reassure</button><button class="opt">respond</button></span></div>
+  <div class="qrow"><em>"I know you can do it. Just practise a bit more."</em> — <span class="opts" data-a="reassure"><button class="opt">persuade</button><button class="opt">reassure</button><button class="opt">respond</button></span></div>
+  <div class="qrow"><em>"OK, I suppose I can do it."</em> — <span class="opts" data-a="respond"><button class="opt">persuade</button><button class="opt">reassure</button><button class="opt">respond</button></span></div>
+</div>
+
+<!-- PART 4 · GAP-FILL: THE CAT DETECTIVE -->
+<div class="card c-lime">
+  <h2><span class="tag">4</span>The cat detective — fill in the gaps</h2>
+  <p class="hint">Passive voice everywhere! Put the words from the bank into the story, then press check. Reload — the bank reshuffles, try again!</p>
+  <div id="bank"></div>
+  <p class="text" id="story"></p>
+  <button class="btn" id="checkBtn">check</button><span class="score" id="score"></span>
+</div>
+
+<!-- PART 5 · WRITING -->
+<div class="card c-cyan">
+  <h2><span class="tag">5</span>✍️ Five sentences</h2>
+  <p class="hint">Write ONE example sentence for each word — in your notebook:</p>
+  <div class="steps">
+    <div class="step"><b>attitude</b> · <b>busker</b> · <b>income</b> · <b>petty crime</b> · <b>vary</b></div>
+    <div class="step">Peek: attitude — the way you think and feel · busker — a street musician · income — money you get for work · petty crime — small crime (shoplifting…) · vary — to be different from case to case.</div>
+  </div>
+  <p class="hint" style="margin-top:.6em">At the lesson: read me your BEST one!</p>
+</div>
+
+<!-- PART 6 · SPEAKING -->
+<div class="card c-magenta">
+  <h2><span class="tag">6</span>🎤 One-minute recording</h2>
+  <p class="hint">Record audio (about a minute) and send it to our Telegram: <b>"My week in three negative adjectives"</b> — three adjectives from our lessons (impossible? unbelievable? impatient? inexperienced?) and the story behind each one.</p>
+</div>
+
+<!-- PART 7 · VIDEO -->
+<div class="card c-orange">
+  <h2><span class="tag">7</span>🎬 Hatton Garden. Part 1</h2>
+  <div class="steps">
+    <div class="step">The video comes as a <b>file in our Telegram</b> — watch it twice.</div>
+    <div class="step"><b>First watch</b> — just enjoy the story of the biggest burglary in London.</div>
+    <div class="step"><b>Second watch</b> — write down <b>THREE details</b> (a number? a name? a place?).</div>
+    <div class="step">Be ready to <b>retell</b> it at the lesson in one minute!</div>
+  </div>
+</div>
+
+<!-- PART 8 · RIDDLE -->
+<div class="card c-lime">
+  <h2><span class="tag">8</span>The case's last riddle</h2>
+  <p class="hint">The more you take, the more you leave behind. What am I?</p>
+  <div class="flips">
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="word">Press to solve 🔍</div><div class="back">Footprints! 👣 — every step takes something and leaves something.</div></div>
+  </div>
+</div>
+
+<!-- PART 9 · RESULTS -->
+<div class="card c-orange">
+  <h2><span class="tag">9</span>📊 Finish — save your attempt</h2>
+  <p class="hint">Press Finish when you've tried everything (you can finish more than once — every attempt is saved in this browser, the best % stays). Then send the report to Elena.</p>
+  <div id="reportOut" style="white-space:pre-wrap;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.7;color:var(--ink-soft)">Nothing to report yet — go play first! 👆</div>
+  <button class="btn" id="finishBtn" style="border-color:var(--yellow);color:var(--yellow)">🏁 Finish &amp; save attempt</button>
+  <button class="btn" id="sendBtn" style="border-color:var(--lime);color:var(--lime)">📨 Send results to Elena</button>
+  <button class="btn" id="copyBtn" style="border-color:var(--cyan);color:var(--cyan)">📋 Copy</button>
+  <span class="score" id="copied">copied ✓</span>
+</div>
+
+<p class="foot">Case closed — see you at the lesson! 👣</p>
+
+<script>
+/* ---------- shuffle ---------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- open ping (best-effort, silent) ---------- */
+try{fetch('https://abacus.jasoncameron.dev/hit/mashahw005/opens').catch(()=>{});}catch(e){}
+
+/* ---------- attempts store (this browser, this week) ---------- */
+const KEY='masha_hw_005_attempts';
+let attempts=[];
+try{attempts=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){attempts=[];}
+
+/* ---------- score parts ---------- */
+const SC={q:0,qTot:5,s:0,sTot:5,gapOk:0,gapTot:8,done:0,doneTot:8};
+const R={m:[],q:[],s:[],g:{},gapAttempts:0};
+
+/* ---------- part 2 & 3: quick choice (first click counts) ---------- */
+document.querySelectorAll('.opts').forEach(box=>{
+  const good=box.dataset.a;
+  const btns=[...box.querySelectorAll('.opt')];
+  shuffle(btns).forEach(b=>box.appendChild(b));
+  let first=true;
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    const ok=b.textContent.trim().toLowerCase()===good.toLowerCase();
+    if(ok){b.className='opt good';}
+    else{b.className='opt bad';setTimeout(()=>b.className='opt',700);}
+    if(first){
+      first=false;
+      const part=box.closest('.card').querySelector('h2').textContent;
+      if(/have \/ get/i.test(part)){
+        if(ok)SC.q++;else R.q.push(box.closest('.qrow').textContent.trim().replace(/\s+/g,' ').slice(0,70));
+      }else{
+        if(ok)SC.s++;else R.s.push(box.closest('.qrow').textContent.trim().replace(/\s+/g,' ').slice(0,60));
+      }
+    }
+  }));
+});
+
+/* ---------- part 4: gap-fill ---------- */
+const words=['was stolen','were called','were questioned','were released','was found','was covered','had','is wanted'];
+const bank=document.getElementById('bank');
+shuffle([...words]).forEach(w=>{const s=document.createElement('span');s.textContent=w;bank.appendChild(s);});
+const story=document.getElementById('story');
+const parts=[
+  "Last month a necklace ",
+  ". The police ",
+  " at once. Two teenagers near the shop ",
+  ", but they knew nothing — so they ",
+  ". A week later the necklace ",
+  " in a parcel addressed to the shop's owner! The parcel had no stamp, and the paper ",
+  " with paw prints. The owner ",
+  " a cat, of course — and the cat was not talking. The case is still open… and the cat ",
+  " for questioning!"
+];
+const answers=["was stolen","were called","were questioned","were released","was found","was covered","had","is wanted"];
+parts.forEach((t,i)=>{
+  story.appendChild(document.createTextNode(t));
+  if(i<answers.length){
+    const inp=document.createElement('input');
+    inp.className='gapinput';inp.setAttribute('autocomplete','off');
+    inp.dataset.a=answers[i];inp.style.width=(answers[i].length+2.5)+'em';
+    story.appendChild(inp);
+  }
+});
+document.getElementById('checkBtn').addEventListener('click',()=>{
+  let ok=0,total=0;
+  document.querySelectorAll('.gapinput').forEach(inp=>{
+    total++;
+    const v=inp.value.trim().toLowerCase();
+    if(v===inp.dataset.a.toLowerCase()){inp.className='gapinput ok';ok++;}
+    else if(v===''){inp.className='gapinput';}
+    else{inp.className='gapinput no';R.g[inp.dataset.a]=(R.g[inp.dataset.a]||0)+1;}
+  });
+  R.gapAttempts++;
+  SC.gapOk=ok;
+  const sc=document.getElementById('score');
+  sc.style.display='inline';
+  sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+});
+
+/* ---------- part 1: matching game ---------- */
+const PAIRS=[
+ ["witness 🧍","sees a crime and can say what happened"],
+ ["pickpocket 👝","steals things from people's pockets and bags"],
+ ["fussy 😖","complains about every little detail — hard to please"],
+ ["displeased 😠","not happy with something (and shows it)"],
+ ["plot 📖","the story of a book or a film — what happens"],
+ ["twist 🌀","a surprise change in the story you didn't expect"],
+ ["clue 🔍","a piece of information that helps to solve a crime"],
+ ["footprints 👣","marks a person's shoes leave on the ground"]
+];
+const mw=document.getElementById('mwords'), md=document.getElementById('mdefs');
+const ws=shuffle(PAIRS.map((p,i)=>({t:p[0],i})));
+const ds=shuffle(PAIRS.map((p,i)=>({t:p[1],i})));
+let selW=null, selD=null, moves=0, lock=false;
+function render(col,list,side){
+  col.innerHTML='';
+  list.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='mitem'; b.dataset.i=o.i;
+    b.innerHTML= side==='w' ? `<span class="mw">${o.t}</span>` : o.t;
+    b.addEventListener('click',()=>pick(b,side));
+    col.appendChild(b);
+  });
+}
+function pick(b,side){
+  if(lock||b.classList.contains('locked'))return;
+  const other= side==='w'?selD:selW;
+  if(other){ other.classList.remove('sel'); }
+  if(side==='w'){ if(selW)selW.classList.remove('sel'); selW=b; }
+  else { if(selD)selD.classList.remove('sel'); selD=b; }
+  b.classList.add('sel');
+  if(selW&&selD){
+    moves++; document.getElementById('mmoves').textContent=moves;
+    lock=true;
+    const ok= selW.dataset.i===selD.dataset.i;
+    const w=selW,d=selD;
+    setTimeout(()=>{
+      if(ok){ w.classList.add('locked'); d.classList.add('locked');
+              w.classList.remove('sel'); d.classList.remove('sel');
+              SC.done++; document.getElementById('mdone').textContent=SC.done;
+              if(SC.done===8) document.getElementById('mmoves').textContent=moves+' 🏆'; }
+      else { w.classList.add('bad'); d.classList.add('bad');
+             R.m.push(w.querySelector('.mw').textContent+' → '+d.textContent.trim().slice(0,45));
+             setTimeout(()=>{w.classList.remove('bad','sel');d.classList.remove('bad','sel');},650); }
+      selW=null; selD=null; lock=false;
+    },300);
+  }
+}
+render(mw,ws,'w'); render(md,ds,'d');
+
+/* ---------- part 9: finish, attempts, report ---------- */
+function fmt(d){const x=new Date(d);return x.getDate().toString().padStart(2,'0')+'.'+(x.getMonth()+1).toString().padStart(2,'0')+' '+x.getHours().toString().padStart(2,'0')+':'+x.getMinutes().toString().padStart(2,'0');}
+function renderReport(extra){
+  const bits=[];
+  const best=attempts.length?Math.max(...attempts.map(a=>a.p)):null;
+  if(extra){
+    bits.push(`Just now: ${extra.p}%  (pairs ${SC.done}/8 · quick choice ${SC.q}/5 · sorting ${SC.s}/5 · gaps ${SC.gapOk}/8)`);
+  }
+  if(attempts.length){
+    bits.push(`Attempts saved: ${attempts.length} · Best: ${best}%`);
+    attempts.slice(-8).forEach(a=>bits.push(`  • ${fmt(a.d)} — ${a.p}%`));
+  }else if(!extra){
+    bits.push('No attempts yet — play the parts, then press Finish.');
+  }
+  const hard=[...new Set(R.m.map(x=>x.split(' → ')[0])), ...Object.keys(R.g)];
+  if(R.q.length) bits.push(`Quick choice — missed (first click): `+[...new Set(R.q)].join(' | '));
+  if(R.s.length) bits.push(`Sorting — missed (first click): `+[...new Set(R.s)].join(' | '));
+  if(hard.length) bits.push(`⭐ Words to give extra love: ${hard.join(', ')}`);
+  document.getElementById('reportOut').textContent=bits.join('\n');
+}
+document.getElementById('finishBtn').addEventListener('click',()=>{
+  const p=Math.round((SC.done+SC.q+SC.s+SC.gapOk)/26*100);
+  attempts.push({d:Date.now(),p});
+  try{localStorage.setItem(KEY,JSON.stringify(attempts));}catch(e){}
+  try{fetch('https://abacus.jasoncameron.dev/hit/mashahw005/checks').catch(()=>{});}catch(e){}
+  renderReport({p});
+});
+function reportText(){
+  const best=attempts.length?Math.max(...attempts.map(a=>a.p)):0;
+  const last=attempts.length?attempts[attempts.length-1].p:0;
+  let t='MASHA · homework 005 results\n';
+  t+=`Attempts: ${attempts.length} · Best: ${best}% · Last: ${last}%\n`;
+  attempts.slice(-8).forEach(a=>{t+=`  • ${fmt(a.d)} — ${a.p}%\n`;});
+  if(R.q.length)t+=`Quick choice missed: `+[...new Set(R.q)].join(' | ')+'\n';
+  if(R.s.length)t+=`Sorting missed: `+[...new Set(R.s)].join(' | ')+'\n';
+  const hard=[...new Set(R.m.map(x=>x.split(' → ')[0])), ...Object.keys(R.g)];
+  if(hard.length)t+=`⭐ Words to give extra love: ${hard.join(', ')}\n`;
+  return t;
+}
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  window.open('https://t.me/share/url?url='+encodeURIComponent('https://elena777-code.github.io/masha-homework/005/')+'&text='+encodeURIComponent(reportText()));
+});
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  navigator.clipboard.writeText(reportText()).then(()=>{
+    const c=document.getElementById('copied');c.style.display='inline';setTimeout(()=>c.style.display='none',1200);
+  });
+});
+renderReport();
+</script>
+</body>
+</html>
