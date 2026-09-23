@@ -80,6 +80,20 @@ h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em
 .btn:active{transform:scale(.97)}
 .score{font-family:'Permanent Marker',cursive;color:var(--lime);font-size:clamp(1.1rem,2vw,1.4rem);
   margin-left:16px;display:none}
+
+/* click-to-reveal cards (the asked-for words + fix-your-own) */
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.flip{cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+  background:rgba(255,255,255,.03);transition:border-color .2s, background .2s}
+.flip:hover{border-color:var(--cyan)}
+.flip .ru{font-weight:800;font-size:clamp(1.05rem,1.9vw,1.3rem);color:var(--yellow)}
+.flip .ru small{display:block;font-weight:500;color:var(--ink-soft);font-size:.72em;margin-top:.3em}
+.flip .back{display:none;margin-top:.6em;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.55;color:var(--ink-soft)}
+.flip .back b{color:var(--lime)}
+.flip .back i{color:var(--cyan);font-style:italic}
+.flip.open .back{display:block}
+.flip.open{border-color:var(--magenta);background:rgba(240,60,176,.06)}
+.flip .say{font-weight:600;color:var(--ink);font-size:clamp(1rem,1.8vw,1.2rem);line-height:1.6}
 </style>
 </head>
 <body>
@@ -87,7 +101,7 @@ h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em
 <div class="eyebrow">Masha · English · homework</div>
 <h1>The test you <span class="spray">never took</span></h1>
 <div class="rule"></div>
-<p class="lead">Two jobs this week: a <b>90-second video</b> (next lesson's grammar in disguise!) and the <b>Unit 8 test</b> you never took — 20 points, checked on the spot. Press <b>Finish</b> at the end — it saves your attempt (try as many times as you like, the best % stays) and prepares the report for Elena. 🎓</p>
+<p class="lead">Two jobs this week: a <b>90-second video</b> (next lesson's grammar in disguise!) and the <b>Unit 8 test</b> you never took — 20 points, checked on the spot. Plus: the words <b>you asked about at the lesson</b> — they're yours now, learn them here. Press <b>Finish</b> at the end — it saves your attempt (try as many times as you like, the best % stays) and prepares the report for Elena. 🎓</p>
 
 <!-- PART 1 · VIDEO 9.1 -->
 <div class="card c-cyan">
@@ -136,9 +150,41 @@ h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em
   </div>
 </div>
 
-<!-- PART 6 · RESULTS -->
+<!-- PART 5 · THE WORDS SHE ASKED ABOUT (the asked-for-words rule, 2026-09-23) -->
+<div class="card c-yellow">
+  <h2><span class="tag">5</span>💬 The words you asked about</h2>
+  <p class="hint">From Wednesday's lesson — say the English first, then click. These are yours now (fast quiz next time!).</p>
+  <div class="flips">
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">сборная</div><div class="back">→ <b>the (school) team</b> — <i>She plays for the school volleyball team.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">классный руководитель</div><div class="back">→ <b>form teacher</b> (British) / <b>homeroom teacher</b> (American) — <i>Our form teacher checks our diaries every morning.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">актовый зал</div><div class="back">→ <b>(school) assembly hall</b> — <i>The whole school gathered in the assembly hall.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">началка</div><div class="back">→ <b>primary school</b> — <i>I've known her since primary school.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">иероглиф <small>careful — rr!</small></div><div class="back">→ <b>Chinese character(s)</b> — <i>She can write a hundred Chinese characters.</i> (hieroglyphs are Egyptian!)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">экзаменатор</div><div class="back">→ <b>examiner</b> — <i>The examiner asked us to work in pairs.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">аксолоты</div><div class="back">→ <b>axolotls</b> — <i>Axolotls can regrow lost legs — and even parts of their heart.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">10–11 классы — это какая школа?</div><div class="back">→ <b>senior high school</b> — <i>In Russia senior high school is grades 10–11; in the UK it's Years 12–13, called sixth form.</i> ("higher" in English usually means university!)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">principle <small>the school word is different!</small></div><div class="back">→ the head of a school = <b>principal</b> — <i>Our principal announced the new rules.</i> A <b>principle</b> is a rule you believe in — <i>It's a matter of principle.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">promotion</div><div class="back">→ <i>He got a <b>promotion</b> at work.</i> (in a shop: a special offer — <i>The shop is running a promotion.</i>)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">advertisement</div><div class="back">→ <i>I saw an <b>advertisement</b> for a new phone.</i> (informal: an ad / adverts)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">look after</div><div class="back">→ take care of — <i>Can you <b>look after</b> my cat for a week?</i></div></div>
+  </div>
+</div>
+
+<!-- PART 6 · FIX YOUR OWN — FROM TODAY -->
+<div class="card c-magenta">
+  <h2><span class="tag">6</span>🔧 Fix your own — from Wednesday</h2>
+  <p class="hint">These four are yours — you said them at the lesson. Say them again, but correctly — then click.</p>
+  <div class="flips">
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="say">“Our teacher <s>give</s> <s>us number</s>.”</div><div class="back">→ Our teacher <b>gives us marks</b>. — school marks, not numbers; and <b>gives</b> (he/she/it + -s)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="say">“I like <s>study</s> Chinese grammar.”</div><div class="back">→ I like <b>studying</b> Chinese grammar. — like + -ing (rr!)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="say">“It can <s>blew</s> up.”</div><div class="back">→ It can <b>blow</b> up. — can + the base form</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="say">“Children wanted to learn <s>others</s>.”</div><div class="back">→ Children wanted to learn <b>other languages</b>. — other + noun; <b>others</b> stands alone (some… others…)</div></div>
+  </div>
+</div>
+
+<!-- PART 7 · RESULTS -->
 <div class="card c-orange">
-  <h2><span class="tag">5</span>📊 Finish — save your attempt</h2>
+  <h2><span class="tag">7</span>📊 Finish — save your attempt</h2>
   <p class="hint">Press Finish when you've tried everything (every attempt is saved in this browser, the best % stays). Then send the report to Elena.</p>
   <div id="reportOut" style="white-space:pre-wrap;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.7;color:var(--ink-soft)">Nothing to report yet — go play first! 👆</div>
   <button class="btn" id="finishBtn" style="border-color:var(--yellow);color:var(--yellow)">🏁 Finish &amp; save attempt</button>
