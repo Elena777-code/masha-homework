@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masha's homework_September the 23rd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* GRAFFITI POP — homework page (hw-005 engine, spec §2b + homework rules:
+   shuffle what can shuffle, self-check everywhere, attempts saved in the
+   browser (localStorage), best % stays; silent open/check counters
+   (mashahw006) let Elena see activity before the Wednesday lesson.
+   Content: Video 9.1 (the 9.2 grammar video — a sneak peek) + exercises
+   pulled from the WW3 Unit 8 Vocabulary Check (Group A) she never took —
+   freshly worded, same words, same task types, scored out of 20. */
+:root{
+  --wall:#17181D; --card:rgba(255,255,255,.055); --ink:#F5F3EE;
+  --ink-soft:#A9ACB8; --cyan:#2BD9E8; --magenta:#F03CB0; --orange:#FF7A29;
+  --yellow:#FFC93C; --lime:#A8E82A; --line:rgba(255,255,255,.14);
+  --radius:14px;
+  --grad:linear-gradient(90deg,var(--cyan),var(--magenta) 45%,var(--orange) 75%,var(--yellow));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 34px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 2px,transparent 2px 90px),
+    var(--wall);
+  min-height:100vh;padding:5vh clamp(14px,5vw,70px) 14vh;
+  display:flex;flex-direction:column;gap:2.6vh;max-width:1100px;margin:0 auto;
+}
+.eyebrow{font-family:'Permanent Marker',cursive;color:var(--yellow);
+  font-size:clamp(1rem,2.2vw,1.35rem);transform:rotate(-1.2deg)}
+h1{font-weight:800;font-size:clamp(1.7rem,4.2vw,3.1rem);line-height:1.12;letter-spacing:-.02em}
+h1 .spray{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-style:italic;
+  display:inline-block}
+.rule{width:110px;height:5px;border-radius:99px;background:var(--grad)}
+.lead{color:var(--ink-soft);font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.55}
+.lead b{color:var(--cyan)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(14px,2.2vw,22px);border-top-width:3px}
+.c-cyan{border-top-color:var(--cyan)}.c-magenta{border-top-color:var(--magenta)}
+.c-orange{border-top-color:var(--orange)}.c-lime{border-top-color:var(--lime)}
+.c-yellow{border-top-color:var(--yellow)}
+h2{font-size:clamp(1.15rem,2.3vw,1.7rem);font-weight:800;margin-bottom:.5em}
+h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em}
+.hint{color:var(--ink-soft);font-size:clamp(.92rem,1.5vw,1.12rem);font-style:italic;line-height:1.5}
+
+.steps{counter-reset:st}
+.step{display:flex;gap:14px;align-items:baseline;padding:.5em 0;border-bottom:1px solid var(--line);
+  font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.55}
+.step:last-child{border-bottom:none}
+.step::before{counter-increment:st;content:counter(st);font-family:'Permanent Marker',cursive;
+  color:var(--lime);font-size:1.25em;min-width:1.1em}
+.foot{color:var(--ink-soft);font-size:clamp(.9rem,1.5vw,1.05rem);text-align:center;
+  font-family:'Permanent Marker',cursive;transform:rotate(-1deg)}
+
+.text{font-size:clamp(1.1rem,2vw,1.45rem);line-height:2.15;color:var(--ink)}
+.gapinput{display:inline-block;min-width:0;background:rgba(255,255,255,.05);
+  border:none;border-bottom:2px solid var(--yellow);color:var(--ink);
+  font:inherit;text-align:center;padding:.05em .2em;outline:none}
+.gapinput:focus{border-bottom-color:var(--cyan)}
+.gapinput.ok{border-bottom-color:var(--lime);color:var(--lime);font-weight:700}
+.gapinput.no{border-bottom-color:var(--orange);color:var(--orange)}
+#bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:.7em}
+#bank span{border:1.5px solid var(--cyan);color:var(--cyan);border-radius:99px;
+  padding:.25em .9em;font-weight:700;font-size:clamp(.95rem,1.6vw,1.15rem)}
+.qrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:.45em 0;
+  font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.9}
+.cap{border:1.5px solid var(--yellow);color:var(--yellow);border-radius:8px;
+  padding:.1em .5em;font-weight:800;font-size:.85em;letter-spacing:.04em}
+
+.btn{border:2px solid var(--magenta);background:transparent;color:var(--magenta);
+  font-family:'Inter';font-weight:800;font-size:clamp(1rem,1.7vw,1.2rem);
+  padding:.55em 1.6em;border-radius:99px;cursor:pointer;transition:all .18s;margin-top:14px}
+.btn:hover{background:var(--magenta);color:#2a0a1f;box-shadow:0 8px 30px rgba(240,60,176,.35)}
+.btn:active{transform:scale(.97)}
+.score{font-family:'Permanent Marker',cursive;color:var(--lime);font-size:clamp(1.1rem,2vw,1.4rem);
+  margin-left:16px;display:none}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Masha · English · homework</div>
+<h1>The test you <span class="spray">never took</span></h1>
+<div class="rule"></div>
+<p class="lead">Two jobs this week: a <b>90-second video</b> (next lesson's grammar in disguise!) and the <b>Unit 8 test</b> you never took — 20 points, checked on the spot. Press <b>Finish</b> at the end — it saves your attempt (try as many times as you like, the best % stays) and prepares the report for Elena. 🎓</p>
+
+<!-- PART 1 · VIDEO 9.1 -->
+<div class="card c-cyan">
+  <h2><span class="tag">1</span>🎬 Video 9.1 — “Could you give me a hand?”</h2>
+  <div class="steps">
+    <div class="step">The video comes as a <b>file in our Telegram</b> — it's only 90 seconds, so watch it <b>twice</b>.</div>
+    <div class="step"><b>First watch</b> — just enjoy it: Tommo is getting ready for a water safety test.</div>
+    <div class="step"><b>Second watch</b> — write down <b>THREE details</b> (a number? a name? a place?).</div>
+    <div class="step">Be ready to <b>retell</b> it at the lesson in one minute — it's Wednesday's grammar topic in disguise.</div>
+  </div>
+</div>
+
+<!-- PART 2 · U8 TEST · FIRST-LETTER RECALL -->
+<div class="card c-magenta">
+  <h2><span class="tag">2</span>Unit 8 test · first-letter recall</h2>
+  <p class="hint">The first letter is there to help you — complete the word, then press <b>check</b>. Type the whole word!</p>
+  <div id="p1"></div>
+  <button class="btn" id="check1">check</button><span class="score" id="score1"></span>
+</div>
+
+<!-- PART 3 · U8 TEST · WORD FORMATION -->
+<div class="card c-orange">
+  <h2><span class="tag">3</span>Unit 8 test · word building</h2>
+  <p class="hint">Complete the sentence with the correct form of the word in CAPITALS — the same trick as the exam tasks. Then <b>check</b>.</p>
+  <div id="p2"></div>
+  <button class="btn" id="check2">check</button><span class="score" id="score2"></span>
+</div>
+
+<!-- PART 4 · U8 TEST · THE MARKET CHASE -->
+<div class="card c-lime">
+  <h2><span class="tag">3½</span>Unit 8 test · the market chase</h2>
+  <p class="hint">Verbs from the box — put them into the story. <b>0</b> is done for you. Reload — the bank reshuffles, try again!</p>
+  <div id="bank"></div>
+  <p class="text" id="story"></p>
+  <button class="btn" id="check3">check</button><span class="score" id="score3"></span>
+</div>
+
+<!-- PART 5 · KEEP THE WORDS -->
+<div class="card c-yellow">
+  <h2><span class="tag">4</span>📚 Keep the words warm</h2>
+  <p class="hint">From Wednesday's slides — fast quiz at the lesson, so give them one extra look:</p>
+  <div class="steps">
+    <div class="step"><b>Learning:</b> learn · memorise · revise · study — <b>Assessment:</b> performance · practical exam · project · speaking exam · written exam</div>
+    <div class="step"><b>Describing students:</b> confident · creative · hard-working · intelligent · lazy · talented/gifted — good at: critical thinking · general knowledge · problem solving · teamwork</div>
+    <div class="step"><b>The curriculum words:</b> compulsory (everyone MUST) · optional (YOU choose) · extracurricular (outside the lessons)</div>
+  </div>
+</div>
+
+<!-- PART 6 · RESULTS -->
+<div class="card c-orange">
+  <h2><span class="tag">5</span>📊 Finish — save your attempt</h2>
+  <p class="hint">Press Finish when you've tried everything (every attempt is saved in this browser, the best % stays). Then send the report to Elena.</p>
+  <div id="reportOut" style="white-space:pre-wrap;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.7;color:var(--ink-soft)">Nothing to report yet — go play first! 👆</div>
+  <button class="btn" id="finishBtn" style="border-color:var(--yellow);color:var(--yellow)">🏁 Finish &amp; save attempt</button>
+  <button class="btn" id="sendBtn" style="border-color:var(--lime);color:var(--lime)">📨 Send results to Elena</button>
+  <button class="btn" id="copyBtn" style="border-color:var(--cyan);color:var(--cyan)">📋 Copy</button>
+  <span class="score" id="copied">copied ✓</span>
+</div>
+
+<p class="foot">20/20 and the case is closed — see you on Wednesday! 🎓</p>
+
+<script>
+/* ---------- shuffle ---------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- open ping (best-effort, silent) ---------- */
+try{fetch('https://abacus.jasoncameron.dev/hit/mashahw006/opens').catch(()=>{});}catch(e){}
+
+/* ---------- attempts store (this browser, this week) ---------- */
+const KEY='masha_hw_006_attempts';
+let attempts=[];
+try{attempts=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){attempts=[];}
+
+/* ---------- score parts (the full test = /20) ---------- */
+const SC={f:0,fTot:8,w:0,wTot:5,c:0,cTot:7};
+const R={f:{},w:{},c:{}};
+
+/* ---------- part builders: qrow + gapinput ---------- */
+function buildRows(id,rows,prefill){
+  const box=document.getElementById(id);
+  rows.forEach((r,idx)=>{
+    const row=document.createElement('div');row.className='qrow';
+    row.appendChild(document.createTextNode((idx+1)+'.  '+r.text));
+    const inp=document.createElement('input');
+    inp.className='gapinput';inp.setAttribute('autocomplete','off');inp.spellcheck=false;
+    inp.dataset.a=r.a;if(prefill)inp.value=r.a[0];
+    inp.style.width=(r.a.length+2.5)+'em';
+    row.appendChild(inp);
+    if(r.after)row.appendChild(document.createTextNode(r.after));
+    if(r.cap){const c=document.createElement('span');c.className='cap';c.textContent=r.cap;row.appendChild(c);}
+    box.appendChild(row);
+  });
+}
+function wireCheck(btnId,scoreId,boxId,part){
+  document.getElementById(btnId).addEventListener('click',()=>{
+    let ok=0,total=0;
+    document.querySelectorAll('#'+boxId+' .gapinput').forEach(inp=>{
+      total++;
+      const v=inp.value.trim().toLowerCase();
+      if(v===inp.dataset.a.toLowerCase()){inp.className='gapinput ok';ok++;}
+      else if(v===''){inp.className='gapinput';}
+      else{inp.className='gapinput no';R[part][inp.dataset.a]=(R[part][inp.dataset.a]||0)+1;}
+    });
+    SC[part]=ok;SC[part+'Tot']=total;
+    const sc=document.getElementById(scoreId);
+    sc.style.display='inline';
+    sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+  });
+}
+
+/* ---------- part 2: first-letter recall (U8 Vocabulary Check 1, reworded) ---------- */
+buildRows('p1',[
+  {text:"They took the case to ",a:"court",after:" because the shop refused to pay."},
+  {text:"The family offered a ",a:"reward",after:" to anyone who finds their missing cat."},
+  {text:"Don't sign anything before a ",a:"lawyer",after:" has read it."},
+  {text:"People who ",a:"commit",after:" a crime should expect to be punished."},
+  {text:"He ",a:"steals",after:" wallets, not bags — pockets are easier."},
+  {text:"He got two years in ",a:"prison",after:" for the robbery."},
+  {text:"Washing all the dishes was his ",a:"punishment",after:" for breaking the vase."},
+  {text:"The ",a:"judge",after:" hit the table with the hammer and shouted: “Order!”"}
+],true);
+wireCheck('check1','score1','p1','f');
+
+/* ---------- part 3: word formation (U8 Vocabulary Check 3, reworded) ---------- */
+buildRows('p2',[
+  {text:"There was a daring ",a:"robbery",after:" at the bank on Monday morning.",cap:"ROBBER"},
+  {text:"Police recorded two ",a:"burglaries",after:" in our street this month.",cap:"BURGLAR"},
+  {text:"After the match there was some ",a:"vandalism",after:" — broken seats and torn flags.",cap:"VANDAL"},
+  {text:"For this shop, ",a:"shoplifting",after:" is a big problem — things disappear from the shelves every day.",cap:"SHOPLIFTER"},
+  {text:"The museum reported the ",a:"theft",after:" of two small paintings.",cap:"THIEF"}
+],false);
+wireCheck('check2','score2','p2','w');
+
+/* ---------- part 4: the market chase (U8 Vocabulary Check 2, reworded) ---------- */
+const words=['climb','escape','jump','fall','pull','push','chase'];
+const bank=document.getElementById('bank');
+shuffle([...words]).forEach(w=>{const s=document.createElement('span');s.textContent=w;bank.appendChild(s);});
+const story=document.getElementById('story');
+const parts=[
+  "Yesterday at the market a man tried to 0 steal a woman's purse. But she was quicker than she looked — she managed to ",
+  " the purse back from his hands, and then ",
+  " him so hard that he almost ",
+  " onto the ground. He kept running between the stalls, so a guard had to ",
+  " him. For a moment the guard lost him and thought he had managed to ",
+  " — but then everyone saw him ",
+  " up a high wall and ",
+  " straight down into a tomato stall!"
+];
+const answers=["pull","push","fall","chase","escape","climb","jump"];
+parts.forEach((t,i)=>{
+  story.appendChild(document.createTextNode(t));
+  if(i<answers.length){
+    const inp=document.createElement('input');
+    inp.className='gapinput';inp.setAttribute('autocomplete','off');inp.spellcheck=false;
+    inp.dataset.a=answers[i];inp.style.width=(answers[i].length+2.5)+'em';
+    story.appendChild(inp);
+  }
+});
+document.getElementById('check3').addEventListener('click',()=>{
+  let ok=0,total=0;
+  document.querySelectorAll('#story .gapinput').forEach(inp=>{
+    total++;
+    const v=inp.value.trim().toLowerCase();
+    if(v===inp.dataset.a.toLowerCase()){inp.className='gapinput ok';ok++;}
+    else if(v===''){inp.className='gapinput';}
+    else{inp.className='gapinput no';R.c[inp.dataset.a]=(R.c[inp.dataset.a]||0)+1;}
+  });
+  SC.c=ok;SC.cTot=total;
+  const sc=document.getElementById('score3');
+  sc.style.display='inline';
+  sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+});
+
+/* ---------- part 6: finish, attempts, report ---------- */
+function fmt(d){const x=new Date(d);return x.getDate().toString().padStart(2,'0')+'.'+(x.getMonth()+1).toString().padStart(2,'0')+' '+x.getHours().toString().padStart(2,'0')+':'+x.getMinutes().toString().padStart(2,'0');}
+function totalPts(){return SC.f+SC.w+SC.c;}
+function totalMax(){return 20;}
+function renderReport(extra){
+  const bits=[];
+  const best=attempts.length?Math.max(...attempts.map(a=>a.p)):null;
+  if(extra){
+    bits.push(`Just now: ${extra.p}%  (first-letter ${SC.f}/8 · word building ${SC.w}/5 · chase ${SC.c}/7 — the full test: ${totalPts()}/20)`);
+  }
+  if(attempts.length){
+    bits.push(`Attempts saved: ${attempts.length} · Best: ${best}%`);
+    attempts.slice(-8).forEach(a=>bits.push(`  • ${fmt(a.d)} — ${a.p}%`));
+  }else if(!extra){
+    bits.push('No attempts yet — do the parts, then press Finish.');
+  }
+  const hard=[...new Set(Object.keys(R.f)),...new Set(Object.keys(R.w)),...new Set(Object.keys(R.c))];
+  if(hard.length) bits.push(`⭐ Words to give extra love: ${hard.join(', ')}`);
+  document.getElementById('reportOut').textContent=bits.join('\n');
+}
+document.getElementById('finishBtn').addEventListener('click',()=>{
+  const p=Math.round(totalPts()/totalMax()*100);
+  attempts.push({d:Date.now(),p});
+  try{localStorage.setItem(KEY,JSON.stringify(attempts));}catch(e){}
+  try{fetch('https://abacus.jasoncameron.dev/hit/mashahw006/checks').catch(()=>{});}catch(e){}
+  renderReport({p});
+});
+function reportText(){
+  const best=attempts.length?Math.max(...attempts.map(a=>a.p)):0;
+  const last=attempts.length?attempts[attempts.length-1].p:0;
+  let t='MASHA · homework 006 results (U8 test + video)\n';
+  t+=`Attempts: ${attempts.length} · Best: ${best}% · Last: ${last}%\n`;
+  attempts.slice(-8).forEach(a=>{t+=`  • ${fmt(a.d)} — ${a.p}%\n`;});
+  const hard=[...new Set(Object.keys(R.f)),...new Set(Object.keys(R.w)),...new Set(Object.keys(R.c))];
+  if(hard.length)t+=`⭐ Words to give extra love: ${hard.join(', ')}\n`;
+  return t;
+}
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  window.open('https://t.me/share/url?url='+encodeURIComponent('https://elena777-code.github.io/masha-homework/006/')+'&text='+encodeURIComponent(reportText()));
+});
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  navigator.clipboard.writeText(reportText()).then(()=>{
+    const c=document.getElementById('copied');c.style.display='inline';setTimeout(()=>c.style.display='none',1200);
+  });
+});
+renderReport();
+</script>
+</body>
+</html>
