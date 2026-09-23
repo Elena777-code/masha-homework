@@ -50,11 +50,11 @@ h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em
 .hint{color:var(--ink-soft);font-size:clamp(.92rem,1.5vw,1.12rem);font-style:italic;line-height:1.5}
 
 .steps{counter-reset:st}
-.step{display:flex;gap:14px;align-items:baseline;padding:.5em 0;border-bottom:1px solid var(--line);
-  font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.55}
+.step{padding:.45em 0;border-bottom:1px solid var(--line);
+  font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.65}
 .step:last-child{border-bottom:none}
 .step::before{counter-increment:st;content:counter(st);font-family:'Permanent Marker',cursive;
-  color:var(--lime);font-size:1.25em;min-width:1.1em}
+  color:var(--lime);font-size:1.25em;display:inline-block;min-width:1.1em}
 .foot{color:var(--ink-soft);font-size:clamp(.9rem,1.5vw,1.05rem);text-align:center;
   font-family:'Permanent Marker',cursive;transform:rotate(-1deg)}
 
@@ -68,8 +68,8 @@ h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em
 #bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:.7em}
 #bank span{border:1.5px solid var(--cyan);color:var(--cyan);border-radius:99px;
   padding:.25em .9em;font-weight:700;font-size:clamp(.95rem,1.6vw,1.15rem)}
-.qrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:.45em 0;
-  font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.9}
+.qrow{display:block;margin:.55em 0;
+  font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:2.2}
 .cap{border:1.5px solid var(--yellow);color:var(--yellow);border-radius:8px;
   padding:.1em .5em;font-weight:800;font-size:.85em;letter-spacing:.04em}
 
