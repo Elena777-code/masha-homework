@@ -14,8 +14,9 @@
    THE 60-MINUTE DEAL (Elena, 2026-09-27): one 60-min online lesson a week
    instead of ~180 min face-to-face, and Wednesday has to cover TWO course
    lessons — so this page IS the WB for the week: listening, her own words
-   (rr · dnk · dictionary), the grammar-revision drill, a sneak peek of
-   Wednesday's grammar, and the lesson-words quiz. Everything self-checking.
+   (taught first, drilled NEXT time — the teach-before-ask rule; teacher
+   shorthand like rr/dnk NEVER appears on the page), the grammar-revision
+   drill, a sneak peek of Wednesday's grammar, and the lesson-words quiz. Everything self-checking.
    Listening: ELLLO Views #1285 + #1286 (Sarah, homeschooling) — the theme
    of Wednesday's reading (WB 9.3); T/F keys verified against the official
    transcripts. */
@@ -107,6 +108,19 @@ audio{width:min(460px,100%);height:38px}
 .alink{font-size:clamp(.85rem,1.4vw,1rem);color:var(--ink-soft)}
 .alink a{color:var(--cyan);text-decoration:none}
 
+/* click-to-reveal teach cards (part 2) */
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.flip{cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+  background:rgba(255,255,255,.03);transition:border-color .2s, background .2s}
+.flip:hover{border-color:var(--cyan)}
+.flip .ru{font-weight:800;font-size:clamp(1.05rem,1.9vw,1.3rem);color:var(--yellow)}
+.flip .ru small{display:block;font-weight:500;color:var(--ink-soft);font-size:.72em;margin-top:.3em}
+.flip .back{display:none;margin-top:.6em;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.55;color:var(--ink-soft)}
+.flip .back b{color:var(--lime)}
+.flip .back i{color:var(--cyan);font-style:italic}
+.flip.open .back{display:block}
+.flip.open{border-color:var(--magenta);background:rgba(240,60,176,.06)}
+
 /* dictionary cards (the d: format) */
 .dict{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
 .dcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:rgba(255,255,255,.03)}
@@ -132,7 +146,7 @@ audio{width:min(460px,100%);height:38px}
 <div class="eyebrow">Masha · English · homework</div>
 <h1>Your <span class="spray">WB</span> for the week</h1>
 <div class="rule"></div>
-<p class="lead">The deal: we have <b>one hour</b> online instead of three lessons face-to-face — so this page is your <b>workbook for the week</b>. It carries the load: <b>listening</b>, <b>your own words</b>, <b>grammar</b>, and a <b>sneak peek</b> at Wednesday's topic. 60 points are waiting — every part checks itself, every attempt is saved, the <b>best %</b> stays. Press <b>Finish</b> at the end. 🎓</p>
+<p class="lead">The deal: we have <b>one hour</b> online instead of three lessons face-to-face — so this page is your <b>workbook for the week</b>. It carries the load: <b>listening</b>, <b>your own words</b> (taught today — drilled next time), <b>grammar</b>, and a <b>sneak peek</b> at Wednesday's topic. <b>49 points</b> are waiting — every part checks itself, every attempt is saved, the <b>best %</b> stays. Press <b>Finish</b> at the end. 🎓</p>
 
 <!-- PART 1 · LISTENING -->
 <div class="card c-cyan">
@@ -157,12 +171,23 @@ audio{width:min(460px,100%);height:38px}
   </div>
 </div>
 
-<!-- PART 2 · YOUR OWN WORDS -->
+<!-- PART 2 · YOUR OWN WORDS — TAUGHT FIRST -->
 <div class="card c-yellow">
-  <h2><span class="tag">2</span>📚 Your own words — the drill</h2>
-  <p class="hint">The words <b>you</b> asked about + the two you didn't know + the traps from your sentences. Type the whole word, then <b>check</b>. Reload — the order reshuffles.</p>
-  <div id="words"></div>
-  <button class="btn" id="checkW">check</button><span class="score" id="scoreW"></span>
+  <h2><span class="tag">2</span>📚 Your own words — meet them properly</h2>
+  <p class="hint">These are <b>your</b> words from our lessons. Say the English aloud first, then click — <b>the translation, what it means, an example</b>. Read them all twice this week. No quiz today — the drill on these comes <b>next time</b>.</p>
+  <div class="flips">
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">сборная</div><div class="back">→ <b>the (school) team</b> — <i>She plays for the school volleyball team.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">классный руководитель</div><div class="back">→ <b>form teacher</b> (British) / <b>homeroom teacher</b> (American) — <i>Our form teacher checks our diaries every morning.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">актовый зал</div><div class="back">→ <b>(school) assembly hall</b> — <i>The whole school gathered in the assembly hall.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">началка</div><div class="back">→ <b>primary school</b> — <i>I've known her since primary school.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">иероглиф <small>the trap word!</small></div><div class="back">→ <b>Chinese character(s)</b> — <i>She can write a hundred Chinese characters.</i> (<b>hieroglyphs</b> are Egyptian — not Chinese!)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">экзаменатор</div><div class="back">→ <b>examiner</b> — <i>The examiner asked us to work in pairs.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">свидетель</div><div class="back">→ <b>witness</b> — a person who <b>sees</b> a crime or an accident happen — <i>The witness saw the robbery from her window.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">карманник</div><div class="back">→ <b>pickpocket</b> — a thief who steals from people's pockets or bags in a crowd — <i>A pickpocket took my phone on the bus.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">аксолотль</div><div class="back">→ <b>axolotl</b> — a Mexican water animal that can <b>regrow</b> lost legs — <i>Axolotls can even regrow parts of their heart.</i></div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">10–11 классы</div><div class="back">→ <b>senior high school</b> — <i>In Russia senior high school is grades 10–11; in the UK it's called sixth form.</i> ("higher" in English usually means university!)</div></div>
+    <div class="flip" onclick="this.classList.toggle('open')"><div class="ru">директор школы <small>the trap pair!</small></div><div class="back">→ <b>principal</b> — the head of a school — <i>Our principal announced the new rules.</i> A <b>principle</b> is a rule you believe in — <i>It's a matter of principle.</i></div></div>
+  </div>
 </div>
 
 <!-- PART 3 · DICTIONARY TASK (the d: format) -->
@@ -229,8 +254,8 @@ const KEY='masha_hw_007_attempts';
 let attempts=[];
 try{attempts=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){attempts=[];}
 
-/* ---------- score parts (total /60) ---------- */
-const SC={tf1:0,tf1Tot:6,tf2:0,tf2Tot:6,w:0,wTot:11,g:0,gTot:10,q:0,qTot:7,l:0,lTot:10};
+/* ---------- score parts (total /49) ---------- */
+const SC={tf1:0,tf1Tot:6,tf2:0,tf2Tot:6,g:0,gTot:10,q:0,qTot:7,l:0,lTot:10};
 const R={};
 
 /* ---------- T/F part builder ---------- */
@@ -320,23 +345,6 @@ buildTF('tf2','2',[
   {t:"In college, learning from lectures was a <b>big struggle</b> for her.",a:"T"}
 ]);
 checkTF('check2','score2','tf2','2');
-
-/* ---------- part 2 · your own words (rr · dnk · asked-for) ---------- */
-const WORDS=[
-  {text:"сборная (школьная) → the school …",acc:["team","the team","school team","the school team"]},
-  {text:"классный руководитель → … (BrE / AmE)",acc:["form teacher","homeroom teacher"],w:16},
-  {text:"актовый зал → …",acc:["assembly hall","the assembly hall","school assembly hall"],w:15},
-  {text:"началка → …",acc:["primary school","the primary school","primary"],w:14},
-  {text:"иероглиф → Chinese …  <span class='cap'>careful — rr!</span>",acc:["chinese characters","characters","chinese character","character"],w:18},
-  {text:"экзаменатор → …",acc:["examiner","the examiner","an examiner"]},
-  {text:"свидетель → …  <span class='cap'>dnk!</span>",acc:["witness","a witness","the witness"]},
-  {text:"карманник → …  <span class='cap'>dnk!</span>",acc:["pickpocket","a pickpocket","the pickpocket"]},
-  {text:"аксолотль (a Mexican water animal that regrows lost legs) → …",acc:["axolotl","axolotls","an axolotl"]},
-  {text:"10–11 классы → …",acc:["senior high school","senior high","senior school"],w:18},
-  {text:"директор школы (not principle!) → …",acc:["principal","the principal","a principal"]}
-];
-buildTyped('words',shuffle([...WORDS]));
-wireTypedCheck('checkW','scoreW','words','w');
 
 /* ---------- part 4 · grammar: the story of the Geography test ---------- */
 const story=document.getElementById('story');
@@ -451,13 +459,13 @@ document.querySelectorAll('[data-dict]').forEach(c=>{
 
 /* ---------- finish, attempts, report ---------- */
 function fmt(d){const x=new Date(d);return x.getDate().toString().padStart(2,'0')+'.'+(x.getMonth()+1).toString().padStart(2,'0')+' '+x.getHours().toString().padStart(2,'0')+':'+x.getMinutes().toString().padStart(2,'0');}
-function totalPts(){return SC.tf1+SC.tf2+SC.w+SC.g+SC.q+SC.l;}
-function totalMax(){return 60;}
+function totalPts(){return SC.tf1+SC.tf2+SC.g+SC.q+SC.l;}
+function totalMax(){return 49;}
 function renderReport(extra){
   const bits=[];
   const best=attempts.length?Math.max(...attempts.map(a=>a.p)):null;
   if(extra){
-    bits.push(`Just now: ${extra.p}%  (T/F ${SC.tf1+SC.tf2}/12 · your words ${SC.w}/11 · grammar ${SC.g}/10 · questions ${SC.q}/7 · lesson words ${SC.l}/10 — total: ${totalPts()}/60 · dictionary copied: ${dictDone()}/5)`);
+    bits.push(`Just now: ${extra.p}%  (T/F ${SC.tf1+SC.tf2}/12 · grammar ${SC.g}/10 · questions ${SC.q}/7 · lesson words ${SC.l}/10 — total: ${totalPts()}/49 · dictionary copied: ${dictDone()}/5)`);
   }
   if(attempts.length){
     bits.push(`Attempts saved: ${attempts.length} · Best: ${best}%`);
