@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masha's homework_September the 27th</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* GRAFFITI POP — homework page (hw-006 engine, spec §2b + homework rules:
+   shuffle what can shuffle, self-check everywhere, attempts saved in the
+   browser (localStorage), best % stays; silent open/check counters
+   (mashahw007) let Elena see activity before the Wednesday lesson.
+   THE 60-MINUTE DEAL (Elena, 2026-09-27): one 60-min online lesson a week
+   instead of ~180 min face-to-face, and Wednesday has to cover TWO course
+   lessons — so this page IS the WB for the week: listening, her own words
+   (rr · dnk · dictionary), the grammar-revision drill, a sneak peek of
+   Wednesday's grammar, and the lesson-words quiz. Everything self-checking.
+   Listening: ELLLO Views #1285 + #1286 (Sarah, homeschooling) — the theme
+   of Wednesday's reading (WB 9.3); T/F keys verified against the official
+   transcripts. */
+:root{
+  --wall:#17181D; --card:rgba(255,255,255,.055); --ink:#F5F3EE;
+  --ink-soft:#A9ACB8; --cyan:#2BD9E8; --magenta:#F03CB0; --orange:#FF7A29;
+  --yellow:#FFC93C; --lime:#A8E82A; --line:rgba(255,255,255,.14);
+  --radius:14px;
+  --grad:linear-gradient(90deg,var(--cyan),var(--magenta) 45%,var(--orange) 75%,var(--yellow));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 34px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 2px,transparent 2px 90px),
+    var(--wall);
+  min-height:100vh;padding:5vh clamp(14px,5vw,70px) 14vh;
+  display:flex;flex-direction:column;gap:2.6vh;max-width:1100px;margin:0 auto;
+}
+.eyebrow{font-family:'Permanent Marker',cursive;color:var(--yellow);
+  font-size:clamp(1rem,2.2vw,1.35rem);transform:rotate(-1.2deg)}
+h1{font-weight:800;font-size:clamp(1.7rem,4.2vw,3.1rem);line-height:1.12;letter-spacing:-.02em}
+h1 .spray{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-style:italic;
+  display:inline-block}
+.rule{width:110px;height:5px;border-radius:99px;background:var(--grad)}
+.lead{color:var(--ink-soft);font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.55}
+.lead b{color:var(--cyan)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(14px,2.2vw,22px);border-top-width:3px}
+.c-cyan{border-top-color:var(--cyan)}.c-magenta{border-top-color:var(--magenta)}
+.c-orange{border-top-color:var(--orange)}.c-lime{border-top-color:var(--lime)}
+.c-yellow{border-top-color:var(--yellow)}
+h2{font-size:clamp(1.15rem,2.3vw,1.7rem);font-weight:800;margin-bottom:.5em}
+h2 .tag{font-family:'Permanent Marker',cursive;font-size:.75em;margin-right:.4em}
+.hint{color:var(--ink-soft);font-size:clamp(.92rem,1.5vw,1.12rem);font-style:italic;line-height:1.5}
+
+.steps{counter-reset:st}
+.step{padding:.45em 0;border-bottom:1px solid var(--line);
+  font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.65}
+.step:last-child{border-bottom:none}
+.step::before{counter-increment:st;content:counter(st);font-family:'Permanent Marker',cursive;
+  color:var(--lime);font-size:1.25em;display:inline-block;min-width:1.1em}
+.foot{color:var(--ink-soft);font-size:clamp(.9rem,1.5vw,1.05rem);text-align:center;
+  font-family:'Permanent Marker',cursive;transform:rotate(-1deg)}
+
+.text{font-size:clamp(1.1rem,2vw,1.45rem);line-height:2.15;color:var(--ink)}
+.gapinput{display:inline-block;min-width:0;background:rgba(255,255,255,.05);
+  border:none;border-bottom:2px solid var(--yellow);color:var(--ink);
+  font:inherit;text-align:center;padding:.05em .2em;outline:none}
+.gapinput:focus{border-bottom-color:var(--cyan)}
+.gapinput.ok{border-bottom-color:var(--lime);color:var(--lime);font-weight:700}
+.gapinput.no{border-bottom-color:var(--orange);color:var(--orange)}
+#bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:.7em}
+#bank span{border:1.5px solid var(--cyan);color:var(--cyan);border-radius:99px;
+  padding:.25em .9em;font-weight:700;font-size:clamp(.95rem,1.6vw,1.15rem)}
+.qrow{display:block;margin:.55em 0;
+  font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:2.2}
+.cap{border:1.5px solid var(--yellow);color:var(--yellow);border-radius:8px;
+  padding:.1em .5em;font-weight:800;font-size:.85em;letter-spacing:.04em}
+
+/* T/F rows (listening) */
+.tfrow{display:flex;gap:.6em;align-items:flex-start;margin:.55em 0;
+  font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.65}
+.tfrow .tf{display:flex;gap:6px;flex-shrink:0}
+.tfrow button{border:1.5px solid var(--ink-soft);background:transparent;color:var(--ink-soft);
+  font-weight:800;font-family:'Inter',sans-serif;font-size:1em;border-radius:8px;
+  width:2.2em;height:1.9em;cursor:pointer;transition:all .15s}
+.tfrow button.sel{border-color:var(--cyan);color:var(--cyan)}
+.tfrow.right button.sel{border-color:var(--lime);color:var(--lime)}
+.tfrow.wrong button.sel{border-color:var(--orange);color:var(--orange)}
+
+/* MC rows (lesson words + rr) */
+.mcrow{margin:.65em 0;font-size:clamp(1.02rem,1.8vw,1.3rem);line-height:1.7}
+.mcrow .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:.35em}
+.mcrow .opt{border:1.5px solid var(--ink-soft);background:transparent;color:var(--ink);
+  font-family:'Inter',sans-serif;font-weight:600;font-size:clamp(.95rem,1.6vw,1.15rem);
+  border-radius:99px;padding:.25em 1em;cursor:pointer;transition:all .15s}
+.mcrow .opt:hover{border-color:var(--cyan)}
+.mcrow .opt.sel{border-color:var(--cyan);color:var(--cyan);background:rgba(43,217,232,.08)}
+.mcrow.right .opt.sel{border-color:var(--lime);color:var(--lime)}
+.mcrow.wrong .opt.sel{border-color:var(--orange);color:var(--orange)}
+
+/* audio players */
+.arow{display:grid;grid-template-columns:auto 1fr;gap:1vw;align-items:center;margin:.5em 0}
+.arow .atag{font-weight:800;color:var(--yellow);white-space:nowrap;font-size:clamp(.95rem,1.6vw,1.15rem)}
+audio{width:min(460px,100%);height:38px}
+.alink{font-size:clamp(.85rem,1.4vw,1rem);color:var(--ink-soft)}
+.alink a{color:var(--cyan);text-decoration:none}
+
+/* dictionary cards (the d: format) */
+.dict{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.dcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:rgba(255,255,255,.03)}
+.dcard .w{font-weight:800;font-size:clamp(1.08rem,1.9vw,1.32rem);color:var(--yellow)}
+.dcard .ru{color:var(--cyan);font-weight:600;margin-top:.2em;font-size:clamp(.98rem,1.7vw,1.18rem)}
+.dcard .mean{color:var(--ink-soft);margin-top:.3em;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.5}
+.dcard .ex{color:var(--ink);margin-top:.4em;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.55;font-style:italic}
+.dcard label{display:flex;gap:.5em;align-items:center;margin-top:.6em;cursor:pointer;
+  color:var(--lime);font-weight:700;font-size:clamp(.95rem,1.6vw,1.1rem)}
+.dcard input{width:1.15em;height:1.15em;accent-color:var(--lime)}
+
+.btn{border:2px solid var(--magenta);background:transparent;color:var(--magenta);
+  font-family:'Inter';font-weight:800;font-size:clamp(1rem,1.7vw,1.2rem);
+  padding:.55em 1.6em;border-radius:99px;cursor:pointer;transition:all .18s;margin-top:14px}
+.btn:hover{background:var(--magenta);color:#2a0a1f;box-shadow:0 8px 30px rgba(240,60,176,.35)}
+.btn:active{transform:scale(.97)}
+.score{font-family:'Permanent Marker',cursive;color:var(--lime);font-size:clamp(1.1rem,2vw,1.4rem);
+  margin-left:16px;display:none}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Masha · English · homework</div>
+<h1>Your <span class="spray">WB</span> for the week</h1>
+<div class="rule"></div>
+<p class="lead">The deal: we have <b>one hour</b> online instead of three lessons face-to-face — so this page is your <b>workbook for the week</b>. It carries the load: <b>listening</b>, <b>your own words</b>, <b>grammar</b>, and a <b>sneak peek</b> at Wednesday's topic. 60 points are waiting — every part checks itself, every attempt is saved, the <b>best %</b> stays. Press <b>Finish</b> at the end. 🎓</p>
+
+<!-- PART 1 · LISTENING -->
+<div class="card c-cyan">
+  <h2><span class="tag">1</span>🎧 Listening — Sarah's two stories about home-schooling</h2>
+  <p class="hint">Wednesday's reading is about home-schooling — meet Sarah first, the girl who lived it. Two short interviews. <b>No transcript on the first two listens!</b> Listen, answer, and only then peek at the ELLLO page if you must.</p>
+
+  <p class="lead" style="margin-top:.6em"><b style="color:var(--orange)">Clip 1 — Sarah the student</b></p>
+  <div class="arow"><span class="atag">ELLLO #1285 · ~2 min</span><audio controls preload="none" src="https://s3-us-west-1.amazonaws.com/elllo-audio/views-1251-1300/1285-Sarah-Homeschool-Student.mp3"></audio></div>
+  <p class="alink">Player not working? Open the lesson page: <a href="https://www.elllo.org/english/1251/1285-Sarah-Homeschool-Student.htm" target="_blank" rel="noopener">elllo.org #1285</a></p>
+  <div id="tf1"></div>
+  <button class="btn" id="check1">check</button><span class="score" id="score1"></span>
+
+  <p class="lead" style="margin-top:1.2em"><b style="color:var(--orange)">Clip 2 — Sarah the teacher</b></p>
+  <div class="arow"><span class="atag">ELLLO #1286 · ~2 min</span><audio controls preload="none" src="https://s3-us-west-1.amazonaws.com/elllo-audio/views-1251-1300/1286-Sarah-Homeschool-Teacher.mp3"></audio></div>
+  <p class="alink">Player not working? Open the lesson page: <a href="https://www.elllo.org/english/1251/1286-Sarah-Homeschool-Teacher.htm" target="_blank" rel="noopener">elllo.org #1286</a></p>
+  <div id="tf2"></div>
+  <button class="btn" id="check2">check</button><span class="score" id="score2"></span>
+
+  <div class="steps" style="margin-top:1em">
+    <div class="step">Reload the page and listen again another day — the ears grow on the second meeting.</div>
+    <div class="step"><b>Wednesday warm-up:</b> would <i>you</i> like to be home-schooled? Two reasons <b>for</b>, two <b>against</b> — be ready to argue. You know Elena will ask. 😉</div>
+  </div>
+</div>
+
+<!-- PART 2 · YOUR OWN WORDS -->
+<div class="card c-yellow">
+  <h2><span class="tag">2</span>📚 Your own words — the drill</h2>
+  <p class="hint">The words <b>you</b> asked about + the two you didn't know + the traps from your sentences. Type the whole word, then <b>check</b>. Reload — the order reshuffles.</p>
+  <div id="words"></div>
+  <button class="btn" id="checkW">check</button><span class="score" id="scoreW"></span>
+</div>
+
+<!-- PART 3 · DICTIONARY TASK (the d: format) -->
+<div class="card c-lime">
+  <h2><span class="tag">3</span>📝 Copy these five into your dictionary</h2>
+  <p class="hint">Each one: <b>translation in Russian</b> + <b>what it means</b> + <b>a couple of examples</b>. Copy them by hand — the notebook comes to the lesson on Wednesday.</p>
+  <div class="dict">
+    <div class="dcard"><div class="w">Chinese character(s)</div><div class="ru">иероглиф</div><div class="mean">a written symbol of the Chinese language — <i>hieroglyphs</i> are Egyptian, not Chinese!</div><div class="ex">She can write a hundred Chinese characters.<br>Maska studies Chinese characters every week.</div><label><input type="checkbox" data-dict="characters"> copied ✓</label></div>
+    <div class="dcard"><div class="w">principal / principle</div><div class="ru">principal — директор · principle — принцип</div><div class="mean">the <b>principal</b> is the head of a school; a <b>principle</b> is a rule you believe in.</div><div class="ex">Our principal announced the exam dates.<br>It's a matter of principle.</div><label><input type="checkbox" data-dict="principal"> copied ✓</label></div>
+    <div class="dcard"><div class="w">witness</div><div class="ru">свидетель</div><div class="mean">a person who <b>sees</b> a crime or an accident happen.</div><div class="ex">The witness saw the robbery from her window.<br>Police are asking witnesses to come forward.</div><label><input type="checkbox" data-dict="witness"> copied ✓</label></div>
+    <div class="dcard"><div class="w">pickpocket</div><div class="ru">карманник</div><div class="mean">a thief who steals from people's pockets or bags in a crowd.</div><div class="ex">A pickpocket took my phone on the bus.<br>Watch your bag at the market — pickpockets work there.</div><label><input type="checkbox" data-dict="pickpocket"> copied ✓</label></div>
+    <div class="dcard"><div class="w">assembly hall</div><div class="ru">актовый зал</div><div class="mean">the big room where the whole school meets.</div><div class="ex">The whole school gathered in the assembly hall.<br>The prize ceremony is in the assembly hall on Friday.</div><label><input type="checkbox" data-dict="assembly"> copied ✓</label></div>
+  </div>
+</div>
+
+<!-- PART 4 · GRAMMAR DRILL -->
+<div class="card c-magenta">
+  <h2><span class="tag">4</span>🔧 Grammar — the story of the Geography test</h2>
+  <p class="hint">Past Simple vs Past Continuous — your revision topic. Remember: state verbs (<i>know, want, believe, like, hear</i>) stay <b>Simple</b> even in the middle of the story. <b>0</b> is done for you. Then <b>check</b>.</p>
+  <p class="text" id="story"></p>
+  <button class="btn" id="checkG">check</button><span class="score" id="scoreG"></span>
+</div>
+
+<!-- PART 5 · SNEAK PEEK -->
+<div class="card c-orange">
+  <h2><span class="tag">5</span>❓ Sneak peek — word order in questions</h2>
+  <p class="hint">Wednesday's grammar, already met in Video 9.1. Read the answer → write the question. Or rebuild the question from the words. <b>Two traps:</b> <i>WHO</i> can be the subject (<i>Who won?</i>) or the object (<i>Who did she phone?</i>). Don't forget: <i>auxiliary + subject + verb</i>.</p>
+  <p class="text"><b>0.</b> A: <span style="color:var(--lime)">Is it raining now?</span> B: No, it isn't raining now.</p>
+  <div id="qs"></div>
+  <button class="btn" id="checkQ">check</button><span class="score" id="scoreQ"></span>
+</div>
+
+<!-- PART 6 · LESSON WORDS -->
+<div class="card c-yellow">
+  <h2><span class="tag">6</span>🎓 Lesson words — the fast-quiz practice</h2>
+  <p class="hint">The Wednesday quiz lives here. Choose the right answer — same words, same tricks.</p>
+  <div id="lw"></div>
+  <button class="btn" id="checkL">check</button><span class="score" id="scoreL"></span>
+</div>
+
+<!-- PART 7 · RESULTS -->
+<div class="card c-orange">
+  <h2><span class="tag">7</span>📊 Finish — save your attempt</h2>
+  <p class="hint">Press Finish when you've tried everything (every attempt is saved in this browser, the best % stays). Then send the report to Elena.</p>
+  <div id="reportOut" style="white-space:pre-wrap;font-size:clamp(.95rem,1.6vw,1.12rem);line-height:1.7;color:var(--ink-soft)">Nothing to report yet — go play first! 👆</div>
+  <button class="btn" id="finishBtn" style="border-color:var(--yellow);color:var(--yellow)">🏁 Finish &amp; save attempt</button>
+  <button class="btn" id="sendBtn" style="border-color:var(--lime);color:var(--lime)">📨 Send results to Elena</button>
+  <button class="btn" id="copyBtn" style="border-color:var(--cyan);color:var(--cyan)">📋 Copy</button>
+  <span class="score" id="copied">copied ✓</span>
+</div>
+
+<p class="foot">60 minutes of Elena + this page = a full week of English. Two lessons in one hour on Wednesday — you're ready. 🎓</p>
+
+<script>
+/* ---------- shuffle ---------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function norm(s){return s.toLowerCase().replace(/[’'.?!,]/g,'').replace(/\s+/g,' ').trim();}
+
+/* ---------- open ping (best-effort, silent) ---------- */
+try{fetch('https://abacus.jasoncameron.dev/hit/mashahw007/opens').catch(()=>{});}catch(e){}
+
+/* ---------- attempts store (this browser, this week) ---------- */
+const KEY='masha_hw_007_attempts';
+let attempts=[];
+try{attempts=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){attempts=[];}
+
+/* ---------- score parts (total /60) ---------- */
+const SC={tf1:0,tf1Tot:6,tf2:0,tf2Tot:6,w:0,wTot:11,g:0,gTot:10,q:0,qTot:7,l:0,lTot:10};
+const R={};
+
+/* ---------- T/F part builder ---------- */
+function buildTF(id,part,rows){
+  const box=document.getElementById(id);
+  rows.forEach((r,idx)=>{
+    const row=document.createElement('div');row.className='tfrow';row.dataset.a=r.a;
+    const num=document.createElement('b');num.textContent=(idx+1)+'.';num.style.minWidth='1.3em';
+    const grp=document.createElement('div');grp.className='tf';
+    ['T','F'].forEach(k=>{
+      const b=document.createElement('button');b.textContent=k;
+      b.onclick=()=>{[...grp.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');row.dataset.sel=k;};
+      grp.appendChild(b);
+    });
+    const txt=document.createElement('span');txt.innerHTML=r.t;
+    row.append(num,grp,txt);box.appendChild(row);
+  });
+}
+function checkTF(btnId,scoreId,boxId,part){
+  document.getElementById(btnId).addEventListener('click',()=>{
+    let ok=0,total=0;
+    document.querySelectorAll('#'+boxId+' .tfrow').forEach(row=>{
+      total++;
+      row.classList.remove('right','wrong');
+      if(!row.dataset.sel)return;
+      if(row.dataset.sel===row.dataset.a){row.classList.add('right');ok++;}
+      else{row.classList.add('wrong');R['tf'+part]=(R['tf'+part]||0)+1;}
+    });
+    SC[part==='1'?'tf1':'tf2']=ok;
+    const sc=document.getElementById(scoreId);
+    sc.style.display='inline';
+    sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+  });
+}
+
+/* ---------- typed rows builder (accept arrays) ---------- */
+function buildTyped(id,rows){
+  const box=document.getElementById(id);
+  rows.forEach((r,idx)=>{
+    const row=document.createElement('div');row.className='qrow';
+    const pre=document.createElement('span');pre.innerHTML=(idx+1)+'.  '+r.text;
+    row.appendChild(pre);
+    const inp=document.createElement('input');
+    inp.className='gapinput';inp.setAttribute('autocomplete','off');inp.spellcheck=false;
+    inp.dataset.acc=JSON.stringify(r.acc);
+    inp.style.width=(r.w||r.acc[0].length+2.5)+'em';
+    row.appendChild(inp);
+    if(r.after)row.appendChild(document.createTextNode(r.after));
+    if(r.cap){const c=document.createElement('span');c.className='cap';c.textContent=r.cap;row.appendChild(c);}
+    box.appendChild(row);
+  });
+}
+function wireTypedCheck(btnId,scoreId,boxId,part){
+  document.getElementById(btnId).addEventListener('click',()=>{
+    let ok=0,total=0;
+    document.querySelectorAll('#'+boxId+' .gapinput').forEach(inp=>{
+      total++;
+      const acc=JSON.parse(inp.dataset.acc).map(norm);
+      const v=norm(inp.value);
+      if(v&&acc.includes(v)){inp.className='gapinput ok';ok++;}
+      else if(v===''){inp.className='gapinput';}
+      else{inp.className='gapinput no';R[part]=(R[part]||0)+1;}
+    });
+    SC[part]=ok;
+    const sc=document.getElementById(scoreId);
+    sc.style.display='inline';
+    sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+  });
+}
+
+/* ---------- part 1 · listening T/F (transcript-verified) ---------- */
+buildTF('tf1','1',[
+  {t:"Sarah was the <b>oldest</b> of four children.",a:"F"},
+  {t:"Her father started home-schooling as soon as it became legal in their state.",a:"T"},
+  {t:"In second grade she could do all her weekly work in <b>one day</b>.",a:"T"},
+  {t:"Her parents started home-schooling because <b>Sarah</b> had problems at school.",a:"F"},
+  {t:"Her father owned a radio station.",a:"T"},
+  {t:"Sarah was home-schooled in the <b>1990s</b>.",a:"F"}
+]);
+checkTF('check1','score1','tf1','1');
+buildTF('tf2','2',[
+  {t:"Sarah had never taught in a real school before she decided to home-school her kids.",a:"F"},
+  {t:"The main reasons: wasted time and too many children in one classroom.",a:"T"},
+  {t:"She says the social side is the <b>easiest</b> part of home-schooling.",a:"F"},
+  {t:"In the US, the end-of-year state test is mailed to the family's house.",a:"T"},
+  {t:"Home-schoolers can take the SAT at a public school, with everyone else.",a:"T"},
+  {t:"In college, learning from lectures was a <b>big struggle</b> for her.",a:"T"}
+]);
+checkTF('check2','score2','tf2','2');
+
+/* ---------- part 2 · your own words (rr · dnk · asked-for) ---------- */
+const WORDS=[
+  {text:"сборная (школьная) → the school …",acc:["team","the team","school team","the school team"]},
+  {text:"классный руководитель → … (BrE / AmE)",acc:["form teacher","homeroom teacher"],w:16},
+  {text:"актовый зал → …",acc:["assembly hall","the assembly hall","school assembly hall"],w:15},
+  {text:"началка → …",acc:["primary school","the primary school","primary"],w:14},
+  {text:"иероглиф → Chinese …  <span class='cap'>careful — rr!</span>",acc:["chinese characters","characters","chinese character","character"],w:18},
+  {text:"экзаменатор → …",acc:["examiner","the examiner","an examiner"]},
+  {text:"свидетель → …  <span class='cap'>dnk!</span>",acc:["witness","a witness","the witness"]},
+  {text:"карманник → …  <span class='cap'>dnk!</span>",acc:["pickpocket","a pickpocket","the pickpocket"]},
+  {text:"аксолотль (a Mexican water animal that regrows lost legs) → …",acc:["axolotl","axolotls","an axolotl"]},
+  {text:"10–11 классы → …",acc:["senior high school","senior high","senior school"],w:18},
+  {text:"директор школы (not principle!) → …",acc:["principal","the principal","a principal"]}
+];
+buildTyped('words',shuffle([...WORDS]));
+wireTypedCheck('checkW','scoreW','words','w');
+
+/* ---------- part 4 · grammar: the story of the Geography test ---------- */
+const story=document.getElementById('story');
+const sparts=[
+  "Last Monday I 0 sat down at my desk and opened my Geography notebook. While I ",
+  " (read) my notes, my phone ",
+  " (ring) — a message from Dasha. I ",
+  " (know) the topic well, because I ",
+  " (revise) it at the weekend. The next day the test ",
+  " (start) at nine. While everybody ",
+  " (write), our teacher ",
+  " (walk) between the desks. I ",
+  " (not / hear) the bell, because everybody ",
+  " (talk) — everybody except me! When I finally came home, my mum ",
+  " (cook) dinner and the whole flat smelled of pies. 🥧"
+];
+const gans=["was reading","rang","knew","revised","started","were writing","was walking","didn't hear","was talking","was cooking"];
+sparts.forEach((t,i)=>{
+  story.appendChild(document.createTextNode(t));
+  if(i<gans.length){
+    const inp=document.createElement('input');
+    inp.className='gapinput';inp.setAttribute('autocomplete','off');inp.spellcheck=false;
+    const accs=[gans[i]];
+    if(gans[i].startsWith("didn't"))accs.push(gans[i].replace("didn't","did not"));
+    inp.dataset.acc=JSON.stringify(accs);
+    inp.style.width=(gans[i].length+2.5)+'em';
+    story.appendChild(inp);
+  }
+});
+document.getElementById('checkG').addEventListener('click',()=>{
+  let ok=0,total=0;
+  document.querySelectorAll('#story .gapinput').forEach(inp=>{
+    total++;
+    const acc=JSON.parse(inp.dataset.acc).map(norm);
+    const v=norm(inp.value);
+    if(v&&acc.includes(v)){inp.className='gapinput ok';ok++;}
+    else if(v===''){inp.className='gapinput';}
+    else{inp.className='gapinput no';R.g=(R.g||0)+1;}
+  });
+  SC.g=ok;
+  const sc=document.getElementById('scoreG');
+  sc.style.display='inline';
+  sc.textContent= ok===total ? `✓ ${ok}/${total} — perfect!` : `✓ ${ok}/${total}`;
+});
+
+/* ---------- part 5 · sneak peek: word order in questions ---------- */
+buildTyped('qs',[
+  {text:"A: …? B: Rosie goes to school in Manchester.",acc:["where does rosie go to school","where does rosie study"],w:30},
+  {text:"A: …? B: The film finished at eight o'clock.",acc:["when did the film finish","what time did the film finish"],w:30},
+  {text:"A: …? B: Mrs Cavendish teaches them French.  <span class='cap'>who = ?</span>",acc:["who teaches them french"],w:28},
+  {text:"A: …? B: She phoned Carl.",acc:["who did she phone","who did she call"],w:24},
+  {text:"the words: <b>you / did / finish / the test / when</b> → …?",acc:["when did you finish the test"],w:28},
+  {text:"the words: <b>who / the prize / win</b> → …?  <span class='cap'>careful!</span>",acc:["who won the prize","who has won the prize"],w:24},
+  {text:"the words: <b>what / about school / you / do / like</b> → …?",acc:["what do you like about school"],w:28}
+]);
+wireTypedCheck('checkQ','scoreQ','qs','q');
+
+/* ---------- part 6 · lesson words (MC) ---------- */
+const LW=[
+  {q:"I love … about how people live in different countries.",o:["studying","learning","revising"],a:1},
+  {q:"Don't forget: you need to hand in your … on Friday.",o:["project","performance","practical exam"],a:0},
+  {q:"I can't come out tonight — I need to … for my Geography test.",o:["learn","revise","memorise"],a:1},
+  {q:"The examiner asks you questions in the English ….",o:["practical exam","performance","speaking exam"],a:2},
+  {q:"Are you going to … Spanish next year, or will you choose a different language?",o:["study","revise","memorise"],a:0},
+  {q:"Someone who is <b>lazy</b> …",o:["doesn't work hard","has a good imagination","knows a lot of facts"],a:0},
+  {q:"Someone who is good at <b>teamwork</b> …",o:["works well with other people","is very clever and learns quickly","knows a lot about different things"],a:0},
+  {q:"School is … in Russia — everyone <b>must</b> go.",o:["optional","compulsory","extracurricular"],a:1},
+  {q:"Chess club is … — <b>you choose</b> it if you like it.",o:["compulsory","optional","extracurricular"],a:1},
+  {q:"Drama club, the orchestra and extra sport are … activities.",o:["compulsory","optional","extracurricular"],a:2}
+];
+(function(){
+  const box=document.getElementById('lw');
+  LW.forEach((r,idx)=>{
+    const row=document.createElement('div');row.className='mcrow';row.dataset.a=r.a;
+    const q=document.createElement('div');q.innerHTML=(idx+1)+'.  '+r.q;
+    const opts=document.createElement('div');opts.className='opts';
+    r.o.forEach((o,k)=>{
+      const b=document.createElement('button');b.className='opt';b.textContent=o;
+      b.onclick=()=>{[...opts.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');row.dataset.sel=k;};
+      opts.appendChild(b);
+    });
+    row.append(q,opts);box.appendChild(row);
+  });
+})();
+document.getElementById('checkL').addEventListener('click',()=>{
+  let ok=0;
+  document.querySelectorAll('#lw .mcrow').forEach(row=>{
+    row.classList.remove('right','wrong');
+    if(row.dataset.sel===undefined)return;
+    if(+row.dataset.sel===+row.dataset.a){row.classList.add('right');ok++;}
+    else{row.classList.add('wrong');R.lw=(R.lw||0)+1;}
+  });
+  SC.l=ok;
+  const sc=document.getElementById('scoreL');
+  sc.style.display='inline';
+  sc.textContent= ok===LW.length ? `✓ ${ok}/${LW.length} — perfect!` : `✓ ${ok}/${LW.length}`;
+});
+
+/* ---------- dictionary checkboxes ---------- */
+function dictDone(){return document.querySelectorAll('[data-dict]:checked').length;}
+try{
+  const dk=JSON.parse(localStorage.getItem('masha_hw_007_dict')||'{}');
+  document.querySelectorAll('[data-dict]').forEach(c=>{if(dk[c.dataset.dict])c.checked=true;});
+}catch(e){}
+document.querySelectorAll('[data-dict]').forEach(c=>{
+  c.addEventListener('change',()=>{
+    const dk={};
+    document.querySelectorAll('[data-dict]').forEach(x=>{if(x.checked)dk[x.dataset.dict]=1;});
+    try{localStorage.setItem('masha_hw_007_dict',JSON.stringify(dk));}catch(e){}
+  });
+});
+
+/* ---------- finish, attempts, report ---------- */
+function fmt(d){const x=new Date(d);return x.getDate().toString().padStart(2,'0')+'.'+(x.getMonth()+1).toString().padStart(2,'0')+' '+x.getHours().toString().padStart(2,'0')+':'+x.getMinutes().toString().padStart(2,'0');}
+function totalPts(){return SC.tf1+SC.tf2+SC.w+SC.g+SC.q+SC.l;}
+function totalMax(){return 60;}
+function renderReport(extra){
+  const bits=[];
+  const best=attempts.length?Math.max(...attempts.map(a=>a.p)):null;
+  if(extra){
+    bits.push(`Just now: ${extra.p}%  (T/F ${SC.tf1+SC.tf2}/12 · your words ${SC.w}/11 · grammar ${SC.g}/10 · questions ${SC.q}/7 · lesson words ${SC.l}/10 — total: ${totalPts()}/60 · dictionary copied: ${dictDone()}/5)`);
+  }
+  if(attempts.length){
+    bits.push(`Attempts saved: ${attempts.length} · Best: ${best}%`);
+    attempts.slice(-8).forEach(a=>bits.push(`  • ${fmt(a.d)} — ${a.p}%`));
+  }else if(!extra){
+    bits.push('No attempts yet — do the parts, then press Finish.');
+  }
+  const hard={};
+  Object.keys(R).forEach(k=>{if(typeof R[k]==='number'&&R[k]>0)hard[k]=R[k];});
+  if(Object.keys(hard).length)bits.push(`⭐ Parts that want one more look: ${Object.keys(hard).join(', ')}`);
+  document.getElementById('reportOut').textContent=bits.join('\n');
+}
+document.getElementById('finishBtn').addEventListener('click',()=>{
+  const p=Math.round(totalPts()/totalMax()*100);
+  attempts.push({d:Date.now(),p});
+  try{localStorage.setItem(KEY,JSON.stringify(attempts));}catch(e){}
+  try{fetch('https://abacus.jasoncameron.dev/hit/mashahw007/checks').catch(()=>{});}catch(e){}
+  renderReport({p});
+});
+function reportText(){
+  const best=attempts.length?Math.max(...attempts.map(a=>a.p)):0;
+  const last=attempts.length?attempts[attempts.length-1].p:0;
+  let t='MASHA · homework 007 results (the WB week: listening + words + grammar)\n';
+  t+=`Attempts: ${attempts.length} · Best: ${best}% · Last: ${last}% · Dictionary copied: ${dictDone()}/5\n`;
+  attempts.slice(-8).forEach(a=>{t+=`  • ${fmt(a.d)} — ${a.p}%\n`;});
+  const hard=Object.keys(R).filter(k=>typeof R[k]==='number'&&R[k]>0);
+  if(hard.length)t+=`⭐ Parts to give extra love: ${hard.join(', ')}\n`;
+  return t;
+}
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  window.open('https://t.me/share/url?url='+encodeURIComponent('https://elena777-code.github.io/masha-homework/007/')+'&text='+encodeURIComponent(reportText()));
+});
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  navigator.clipboard.writeText(reportText()).then(()=>{
+    const c=document.getElementById('copied');c.style.display='inline';setTimeout(()=>c.style.display='none',1200);
+  });
+});
+renderReport();
+</script>
+</body>
+</html>
